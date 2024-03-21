@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Scott\'s Homepage',
   tagline: 'Looking into it',
-  favicon: 'https://gravatar.com/avatar/c7abdf73e309877ecf09e03f27d44a4530dbb98035e47bd86b001a396d095a9b',
+  favicon: '/img/me.png',
 
   // Set the production url of your site here
   url: 'https://scott.msd3.io',
@@ -49,49 +49,29 @@ const config: Config = {
       title: "Scott",
       logo: {
         alt: 'Scott Driggers Logo',
-        src: 'https://gravatar.com/avatar/c7abdf73e309877ecf09e03f27d44a4530dbb98035e47bd86b001a396d095a9b?size=512',
-        style: {
-          borderRadius: '50%',
-        }
+        src: '/img/me.png',
       },
       items: [
         { to: '/blog', label: 'Blog', position: 'left' },
-        { to: '/blog/tags/projects', label: 'Projects', position: 'left' },
-        { to: '/resume', label: 'Resume', position: 'left' },
+        { to: '/about', label: 'About', position: 'left' },
       ],
     },
     footer: {
-      style: 'dark',
       links: [
         {
-          title: 'Links',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/msdrigg',
-            },
-            {
-              label: 'Instagram',
-              href: 'https://www.instagram.com/notscottdriggers',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/thecasualwaffle',
-            },
-          ],
+          html: `<a href="https://github.com/msdrigg" class="logo" target="_blank">
+            <img src="/img/gh.png" alt="Github Logo">
+          </a>`
         },
         {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'Projects',
-              to: '/projects',
-            },
-          ],
+          html: `<a href="https://www.instagram.com/notscottdriggers" class="logo" target="_blank">
+            <img src="/img/ig.png" alt="Instagram Logo">
+          </a>`
+        },
+        {
+          html: `<a href="https://twitter.com/thecasualwaffle" class="logo" target="_blank">
+            <img src="/img/x.png" alt="Twitter Logo">
+          </a>`
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Scott Driggers.`,

@@ -20,3 +20,38 @@
     --ifm-color-primary-lightest: #55d43c;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.logo {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+.logo img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0);
+    opacity: 0.8;
+}
+
+[data-theme="dark"] .logo img {
+    filter: brightness(0) invert(1);
+}
+
+span.footer__link-separator {
+    visibility: hidden;
+}
+
+.avatar__photo--xxl {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 50%;
+}
