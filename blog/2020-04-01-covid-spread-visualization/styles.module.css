@@ -1,0 +1,96 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+.state {
+    fill: gray;
+}
+.countyFill {
+    fill: #00a000;
+}
+.countyBoundary {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+    stroke-width: 0.01rem;
+}
+.caseBoundary {
+    fill: #fff;
+    fill-opacity: 0;
+    stroke: #fff;
+    stroke-width: 0.01rem;
+}
+.caseBoundary:hover {
+    stroke: #000;
+}
+.case {
+    fill-opacity: 0.6;
+    fill: #c00000;
+}
+.death {
+    fill-opacity: 1;
+    fill: #000;
+}
+.sizeLegend circle,
+.timeLegend rect {
+    fill: none;
+    stroke: #ccc;
+}
+.button {
+    cursor: pointer;
+}
+.button text {
+    fill: var(--ifm-color-primary);
+    font: 0.7rem;
+}
+.colorLegend text,
+.play text,
+.stop text,
+.timeLegend text {
+    font-size: 0.7rem;
+    text-anchor: middle;
+}
+
+.sizeLegend text {
+    font-size: 0.6rem;
+    text-anchor: middle;
+}
+
+.colorLegend text {
+    fill: #fff;
+}
+
+[data-theme="dark"] .sizeLegend text,
+[data-theme="dark"] .timeLegend text {
+    fill: #fff;
+}
+
+.sizeLegend text,
+.timeLegend text {
+    fill: #000;
+}
+
+.button > rect {
+    fill: transparent;
+    stroke: var(--ifm-color-primary);
+}
+.purple-text {
+    color: plum;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 8rem;
+    height: 5rem;
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #fff;
+    background: var(--ifm-color-info);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    opacity: 0.9;
+    transition: opacity 0.1s;
+    pointer-events: none;
+}

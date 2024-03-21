@@ -1,0 +1,54 @@
+---
+slug: double-pendulum-chaos-visualization
+title: Double Pendulum Chaos Visualization
+authors: msdrigg
+tags: [projects, visualization, d3]
+---
+
+import {DoublePendulumDemo, DoublePendulumSliderDemo} from './DoublePendulum'
+
+# The Chaos of Double Pendulums
+
+## Introduction
+
+What is chaos? Chaos is seen a crowded room, a shattered glass and a uncontrollable dog. At its deepest level, chaos is disorder and unpredictability.
+
+In mathematics and physics, chaos means something very specific
+
+    - sensitive to starting conditions
+    - non-repeating
+
+These two ideas mean that chaotic problems are impossible to solve exactly and difficult to solve approximately. But they're very important problems to work on because chaos theory is the reason that things like the weather, the stock market and fluid flow is so hard to predict. If we can get better at predicting hurricanes or stock market crashes, we can do a better job preparing for them.
+
+## Stable Double Pendulum
+
+The atmosphere and the stock market are large systems with many moving parts, but we can find chaos in very simple systems. Pendulums are the essence of regularity. They swing so consistently that they were used by Galileo to make the earliest reliable clock. In the diagram directly below, we add a second pendulum to the end of the first. This adds a slight disruption to the oscillation, but it still swings regularly.
+
+<DoublePendulumDemo />
+
+## Unstable Double Pendulum
+
+If we increase the length of oscillation, the system takes a few swings, but it soon loses all regularity and becomes unstable. Below is a demonstration of how sensitive and unpredictable double pendulums are. This system starts out with 50 pendulums almost exactly on top of each other. Their bobs are just 0.03 degrees apart at the furthest (If you zoom into the image, you should be able to see the edges of the ones in the back). After just a few seconds, these pendulums split and take a totally unique path.
+
+<DoublePendulumDemo pendulumNumber={60} explain={false} phi1Init={1.6} phi2Init={3.1} deviation={0.0005} caption="60 pendulums 0.03 degrees apart initially" />
+
+## Pendulum Paths
+
+There is a certain beauty to the chaos. The few moments of instability before the bobs diverge is mesmerizing. In the demo below, the paths of the pendulums are plotted behind them.
+
+<DoublePendulumDemo pendulumNumber={60} explain={false} phi1Init={1.6} phi2Init={3.1} deviation={0.0005} caption="50 pendulums with their paths traced out" trails={true} />
+
+## Adjusting the Parameters
+
+Below I added a demonstration where you can play with some of the parameters.
+
+<DoublePendulumSliderDemo pendulumNumber={60} explain={false} phi1Init={1.6} phi2Init={3.1} deviation={0.0005} caption="Change the parameters below to adjust the setup" explanation="More pendulums and longer paths will cause the demo to run slower." trails={true} trailLength={0} />
+
+In this final demo, we can observer how difficult these problems are to solve even with the assistance of a computer. To process these simulations fast enough on a normal computer for you to see them, the solution loses much accuracy. This loss can be seen by making rod lengths or masses significantly different. When one rod is much longer than the other, the errors become significant enough to notice with the naked eye. You can see the second pendulum dragging behind or lunging forward unnaturally.
+
+These errors can be reduced, but not without a lot of time or a larger computer.
+
+## Sources
+
+-   [Assencio, Diego. "The double pendulum: Hamiltonian formulation (2014)."](https://diego.assencio.com/?index=e5ac36fcb129ce95a61f8e8ce0572dbf) Accessed 31 Mar. 2020.
+-   Taylor, John. _Classical Mechanics_. University Science Books, 2005.

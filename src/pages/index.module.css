@@ -1,0 +1,36 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: linear-gradient(
+        90deg,
+        var(--ifm-color-primary-lightest) 0%,
+        var(--ifm-color-primary-lighter) 25%,
+        var(--ifm-color-primary) 50%,
+        var(--ifm-color-primary-darker) 75%,
+        var(--ifm-color-primary-darkest) 100%
+    );
+}
+
+.cardWrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 1rem;
+    padding: 1rem 0 2rem 0;
+}
+
+.main {
+    padding: 2rem;
+}
+
+@media screen and (max-width: 996px) {
+    .heroBanner {
+        padding: 2rem;
+    }
+}

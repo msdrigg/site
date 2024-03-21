@@ -1,0 +1,16 @@
+[
+	{"name": "Cheetah", "speed": 30, "description": "The Cheetah is the fastest land animal", "image": "cheetah.jpg"},
+	{"name": "Koenigsegg Agera RS", "speed": 124.2, "description": "The Koenigsegg Agera is the fastest production car",  "image": "koenigsegg.jpg"},
+	{"name": "Freefall", "speed": 373, "description": "Humans typically fall 6 times slower but this is the speed record for human free-fall", "image": "freefall.jpg"},
+	{"name": "Sound", "speed": 1500, "description": "Sound travels nearly 4 times faster in water than in air",  "image": "sound.jpg"},
+	{"name": "Apollo 10", "speed": 11107, "description": "Apollo 10 was the fastest human-crewed vehical", "image": "apollo.png"},
+	{"name": "Juno Spacecraft", "speed": 73800, "description": "The Juno probe to Jupiter was the fastest man-made technical object", "image": "juno.jpg"},
+	{"name": "Solar System", "speed": 200000, "description": "The solar system orbits at this speed through the Milky Way Galaxy", "image": "solarSystem.jpg"},
+	{"name": "Milky Way", "speed": 552000, "description": "The Milky Way Galaxy moves at this speed relative to the rest of the universe", "image": "milkyWay.jpg"},
+	{"name": "Fast Neutron", "speed": 14000000, "description": "Fast neutrons are produced in nuclear bombs", "image": "neutron.jpg"},
+	{"name": "Electron in a Cathode Ray Tube", "speed": 30000000, "description": "Cathode ray tubes are found in old TVs and computer monitors", "image": "cathodeRay.jpg"},
+	{"name": "Lightening", "speed": 100000000, "description": "While electricity travels at near light speed in a wire, lightening is much slower", "image": "returnLightening.jpg"},
+	{"name": "Fiber Optics", "speed": 200000000, "description": "Signals in a fiber optic cable offer the fastest earth-bound communication", "image": "fiberOptics.jpg"},
+	{"name": "Large Hadron Collider", "speed": 299792456, "description": "Protons in the large hadron collider are the fastest man-controlled objects", "image": "collider.jpg"},
+	{"name": "Light", "speed": 299792485, "description": "Light in free space is the fastest thing in the universe", "image": "light.jpg"}
+]
