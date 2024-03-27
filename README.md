@@ -17,3 +17,4 @@ Personal website loading...
         -   Finding out that I needed to reduce the data load weight in my app
 -   Write a post on RayTracing
 -   Write a blog post about LORA?
+-   Write an extensive wifi testing framework?

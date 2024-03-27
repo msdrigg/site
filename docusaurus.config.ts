@@ -76,11 +76,23 @@ const config: Config = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Scott Driggers.`,
     },
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+  plugins: [[
+    'docusaurus-plugin-plausible',
+    {
+      domain: 'site.msd3.io',
+      customDomain: 'plaus-alytics.msd3.io'
+    },
+  ]],
 };
 
 export default config;

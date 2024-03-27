@@ -328,7 +328,6 @@ export default function LightSpeed() {
                 .attr("r", function (d: any) {
                     return radius(+d.value[1]);
                 });
-            console.log(cases);
 
             countyLocations
                 .append("circle")
@@ -399,13 +398,11 @@ export default function LightSpeed() {
             let countyLocations = svg
                 .selectAll(".county-centroid")
                 .data(dVList);
-            console.log("H2", countyLocations, dVList);
             let cases = countyLocations.select(`circle.${styles.case}`);
             let deaths = countyLocations.select(`circle.${styles.death}`);
             let boundaries = countyLocations.select(
                 `circle.${styles.caseBoundary}`
             );
-            console.log(cases, deaths, boundaries);
 
             svg.select(`.${styles.timeLegend}`)
                 .data([day])

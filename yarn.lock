@@ -5521,6 +5521,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"docusaurus-plugin-plausible@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "docusaurus-plugin-plausible@npm:0.0.5"
+  checksum: 10c0/409b58a81c013db65ebccc1e0d9f290ab13eec770e094107ba00039663d4fb8e4c7051f27e1761d66edfbb9031180b3100b48b8142a982d7528b76e5bed76f67
+  languageName: node
+  linkType: hard
+
 "dom-converter@npm:^0.2.0":
   version: 0.2.0
   resolution: "dom-converter@npm:0.2.0"
@@ -11122,6 +11129,7 @@ __metadata:
     "@types/d3": "npm:^7.4.3"
     clsx: "npm:^2.1.0"
     d3: "npm:^7.9.0"
+    docusaurus-plugin-plausible: "npm:^0.0.5"
     prism-react-renderer: "npm:^2.3.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"

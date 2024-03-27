@@ -102,7 +102,6 @@ export function DoublePendulumSliderDemo(
                             (item[2] + item[3]) / 2
                         }
                         onChange={(name, value) => {
-                            console.log("CHANGING", name, value);
                             setSliderOverrides({
                                 ...sliderOverrides,
                                 [name]: value,
