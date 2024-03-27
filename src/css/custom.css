@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     --ifm-color-primary: #4b8241;
     --ifm-color-primary-dark: #437446;
@@ -48,10 +52,4 @@
 
 span.footer__link-separator {
     visibility: hidden;
-}
-
-.avatar__photo--xxl {
-    width: 20rem;
-    height: 20rem;
-    border-radius: 50%;
 }

@@ -18,19 +18,35 @@
     );
 }
 
+.mainSectionWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-grow: 1;
+    width: 100%;
+}
+
 .cardWrapper {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     gap: 1rem;
-    padding: 1rem 0 2rem 0;
+    padding: 1rem 0 2rem 0; */
+    display: flex;
+}
+
+.card {
+    width: 100%;
+    flex-grow: 1;
 }
 
 .main {
-    padding: 2rem;
+    padding: 2rem 0;
 }
 
-@media screen and (max-width: 996px) {
-    .heroBanner {
-        padding: 2rem;
-    }
+.mainAvatar {
+    width: 18rem;
+    height: 18rem;
+    border-radius: 50%;
 }

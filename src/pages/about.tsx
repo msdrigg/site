@@ -18,41 +18,40 @@ export default function Home(): JSX.Element {
                         styles.heroBanner
                     )}
                 >
-                    <div className="container">
-                        <p className="hero__subtitle">Hi I am</p>
-                        <Heading as="h1" className="hero__title">
-                            Scott Driggers
-                        </Heading>
-                        <p className="hero__subtitle">A software engineer</p>
-                    </div>
+                    Hi, I'm Scott Driggers
                 </header>
             </div>
-            <main className={styles.main}>
+            <main className="px-8 py-4 space-y-8">
                 <section>
                     <h2 className="text--left">Background</h2>
-                    <div className="card">
-                        <p>
-                            Background in physics + math, done some work in full
-                            stack development for saas systems in healthcare,
-                            enjoy writing in Rust when I can, built a few mobile
-                            apps with bluetooth features, experience in
-                            bluetooth development, experience in data science +
-                            visualization, experience in standard ml
-                        </p>
-                        <p>
-                            Love learning and what's next for me is learning to
-                            manage people, direct a project to completion and
-                            work more about the business side of things.
-                        </p>
-                        <p>
-                            Additionally I am hoping to get the chance to learn
-                            more on the hardware side (embedded systems, chip
-                            design, etc.)
-                        </p>
-                    </div>
+                    <p>
+                        I graduated from Clemson University with degrees in
+                        physics and mathematics. In college I focused on the
+                        theoretical side of these fields and studied subjects
+                        that ranged from quantum mechanics to abstract algebra.
+                    </p>
+                    <p>
+                        On top of these projects, I done some work in full stack
+                        development for saas systems in healthcare, enjoy
+                        writing in Rust when I can, built a few mobile apps with
+                        bluetooth features, experience in bluetooth development,
+                        experience in data science + visualization, experience
+                        in standard ml
+                    </p>
+                    <p>
+                        Love learning and what's next for me is learning to
+                        manage people, direct a project to completion and work
+                        more about the business side of things.
+                    </p>
+                    <p>
+                        Additionally I am hoping to get the chance to learn more
+                        on the hardware side (embedded systems, chip design,
+                        etc.)
+                    </p>
                 </section>
+
                 <section>
-                    <h2 className="text--left">Experience</h2>
+                    <h2 className="text-left">Experience</h2>
                     <Timeline>
                         <TimelineItem date="2022-Present">
                             <h2>Systems Architect</h2>
@@ -115,6 +114,40 @@ export default function Home(): JSX.Element {
                             </p>
                         </TimelineItem>
                     </Timeline>
+                </section>
+                <section>
+                    <Heading as="h2" className="text--left">
+                        Fun facts
+                    </Heading>
+                    <div className="flex-grow text-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+                        <div
+                            className={clsx("card", styles.card, "shadow--md")}
+                        >
+                            <div className="card__header">
+                                <h3>Home</h3>
+                            </div>
+                            <div className="card__body">
+                                <p>
+                                    I'm currently living in Columbia SC with my
+                                    wife and two cats
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            className={clsx("card", styles.card, "shadow--md")}
+                        >
+                            <div className="card__header">
+                                <h3>Hobbies</h3>
+                            </div>
+                            <div className="card__body">
+                                <p>
+                                    I enjoy ultimate frisbee, hiking, and
+                                    anything outdoors. I'm thinking about
+                                    starting Jiu Jitsu
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </main>
         </Layout>

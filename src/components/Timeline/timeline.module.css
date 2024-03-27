@@ -1,6 +1,6 @@
 .timelineSection {
     min-height: 100vh;
-    padding: 2rem 0;
+    padding: 0.5rem 0;
 }
 .timelineItems {
     max-width: 60rem;
@@ -28,9 +28,6 @@
 .timelineItem:nth-child(odd) {
     padding-right: calc(50% + 1.8rem);
     text-align: right;
-}
-.timelineItem:nth-child(odd) > .timelineContent {
-    /* text-align: left; */
 }
 .timelineItem:nth-child(even) {
     padding-left: calc(50% + 1.8rem);

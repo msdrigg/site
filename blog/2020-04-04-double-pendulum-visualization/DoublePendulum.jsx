@@ -1,5 +1,30 @@
+import { useEffect, useId, useMemo, useState } from "react";
 import * as d3 from "d3";
+
 import styles from "./styles.module.css";
+
+let goodColorScales = [
+    d3.interpolateOranges,
+    d3.interpolateInferno,
+    d3.interpolatePlasma,
+];
+
+let baseConstants = {
+    l1: 8,
+    m1: 5,
+    l2: 6,
+    m2: 5,
+    phi1Init: 0.5,
+    phi2Init: 0.5,
+    pendulumNumber: 1,
+    deviation: 0,
+    trailUpdateInterval: 3,
+    trailLength: 60,
+    trails: false,
+    colorscale: goodColorScales[1],
+    explain: true,
+    caption: "A double pendulum with a small oscillation",
+};
 
 export class AnimationLock {
     locked;
@@ -18,7 +43,7 @@ export class AnimationLock {
     }
 }
 
-export default class DoublePendulumDemo {
+class DoublePendulum {
     stepSize = 0.001;
     repeats = 32;
     randomness = 0.4;
@@ -475,7 +500,7 @@ export default class DoublePendulumDemo {
 }
 const g = 9.81;
 
-export function concat(a, b, c, d) {
+function concat(a, b, c, d) {
     let destination = new Float64Array(
         a.length + b.length + c.length + d.length
     );
@@ -486,7 +511,7 @@ export function concat(a, b, c, d) {
     return destination;
 }
 
-export function linspace(start, stop, number) {
+function linspace(start, stop, number) {
     let arr = new Float64Array(number);
     let step;
     if (number > 1) step = (stop - start) / (number - 1);
@@ -497,7 +522,7 @@ export function linspace(start, stop, number) {
     return arr;
 }
 
-export function initPendulums(phi1, phi2, deviation, number) {
+function initPendulums(phi1, phi2, deviation, number) {
     // Phi1 Array contains all the values of phi1 (no deviation)
     // Phi2 Array contains all the values of phi2 but deviated such that the
     //  	average value is phi2, and the difference between any 2 phi2's is
@@ -523,7 +548,7 @@ export function initPendulums(phi1, phi2, deviation, number) {
     return output;
 }
 
-export function RK4LA(f, h, t, p, constants) {
+function RK4LA(f, h, t, p, constants) {
     const k1 = f(t, p.clone(), constants).scalarMul(h);
     const k2 = f(
         t + h / 2,
@@ -546,7 +571,7 @@ export function RK4LA(f, h, t, p, constants) {
     );
 }
 
-export function derivativeLA(t, p, constants) {
+function derivativeLA(t, p, constants) {
     // p: phi1, p1, phi2, p2
     // constants: l1, m1, l2, m2
     const l1 = constants[0],
@@ -633,7 +658,7 @@ export function derivativeLA(t, p, constants) {
     return concat(dphi1, dp1, dphi2, dp2);
 }
 
-export function convertToCoordinates(p, constants) {
+function convertToCoordinates(p, constants) {
     const l1 = constants[0],
         m1 = constants[1],
         l2 = constants[2],
@@ -767,4 +792,121 @@ Float64Array.prototype.sin = function () {
         destination[i] = Math.sin(destination[i]);
     }
     return destination;
+};
+
+let lock = new AnimationLock();
+
+export function DoublePendulumDemo(constantOverrides) {
+    let constants = useMemo(() => {
+        return { ...baseConstants, ...constantOverrides };
+    }, [constantOverrides]);
+
+    let id = useId();
+
+    let key = useMemo(() => {
+        return Math.random();
+    }, [constants, id]);
+
+    useEffect(() => {
+        let demo = new DoublePendulum({ ...constants, location: id }, lock);
+        demo.init();
+        const demoLocation = document.getElementById(id);
+        if (!demoLocation) return;
+
+        // Check for hover vs touch device
+        if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+            demoLocation.onclick = function (d) {
+                if (d.target != d.currentTarget) return;
+                if (demo.continueLooping) {
+                    demo.stop.bind(demo)();
+                }
+            };
+            demoLocation.ondblclick = demo.restart.bind(demo);
+        } else {
+            demoLocation.onmouseenter = demo.start.bind(demo);
+            demoLocation.onmouseleave = demo.stop.bind(demo);
+            demoLocation.onclick = demo.restart.bind(demo);
+        }
+    }, [constants, id]);
+
+    return <div className={styles.wrapper} id={id} key={key} />;
+}
+
+export function DoublePendulumSliderDemo(constantOverrides) {
+    let [sliderOverrides, setSliderOverrides] = useState({
+        ...baseConstants,
+        ...constantOverrides,
+    });
+
+    const slidersConstants = [
+        ["Pendulum Number", "pendulumNumber", 1, 200, true],
+        ["Trail Length", "trailLength", 0, 200, true],
+        ["Rod A Length", "l1", 3, 10, false],
+        ["Rod B Length", "l2", 3, 10, false],
+        ["Mass A", "m1", 1, 10, false],
+        ["Mass B", "m2", 1, 10, false],
+        ["Angle A Initial", "phi1Init", 0, 2 * Math.PI, false],
+        ["Angle B Initial", "phi2Init", 0, 2 * Math.PI, false],
+    ];
+
+    return (
+        <>
+            <DoublePendulumDemo {...sliderOverrides} />
+            <div className={styles.sliderWrapper}>
+                {slidersConstants.map((item, i) => (
+                    <Slider
+                        key={i}
+                        id={item[1]}
+                        name={item[0]}
+                        startValue={item[2]}
+                        stopValue={item[3]}
+                        isInteger={item[4]}
+                        value={
+                            sliderOverrides[item[1]] ?? (item[2] + item[3]) / 2
+                        }
+                        onChange={(name, value) => {
+                            setSliderOverrides({
+                                ...sliderOverrides,
+                                [name]: value,
+                            });
+                        }}
+                    />
+                ))}
+            </div>
+        </>
+    );
+}
+
+const Slider = ({
+    name,
+    id,
+    startValue,
+    stopValue,
+    isInteger,
+    value,
+    onChange,
+}) => {
+    const handleInputChange = (event) => {
+        const newValue = isInteger
+            ? parseInt(event.target.value)
+            : parseFloat(event.target.value);
+        onChange(id, newValue);
+    };
+
+    return (
+        <div className="sliderWrapper">
+            <div>
+                {name}: <span style={{ fontWeight: "bold" }}>{value}</span>
+            </div>
+            <input
+                type="range"
+                min={startValue}
+                max={stopValue}
+                value={value}
+                step={isInteger ? 1 : 0.1}
+                className="slider"
+                onChange={handleInputChange}
+            />
+        </div>
+    );
 };
