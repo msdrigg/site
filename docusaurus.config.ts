@@ -37,6 +37,7 @@ const config: Config = {
         docs: false,
         blog: {
           showReadingTime: true,
+          blogSidebarCount: 10,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -85,7 +86,9 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: [],
+      additionalLanguages: [
+        "bash", "swift"
+      ],
     },
   } satisfies Preset.ThemeConfig,
   plugins: [

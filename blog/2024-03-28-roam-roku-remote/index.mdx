@@ -1,0 +1,75 @@
+---
+slug: roam-roku-remote
+title: "Announcing Roam, the best Roku Remote"
+authors: msdrigg
+tags:
+    - projects
+    - ios
+image: ./assets/app-icon.png
+---
+
+import appIconUrl from './assets/app-icon.png';
+import screenshotMacosUrl from './assets/screenshot-macos.png';
+import screenshotIosUrl from './assets/screenshot-ios.png';
+import screenshotVisionosUrl from './assets/screenshot-visionos.png';
+
+
+Roam is a Roku TV remote that works for every single iOS device, but really shines on macOS.
+
+With Roam, I have tried to integrate deeply into the apple ecosystem, with support for keyboard shortcuts on macOS, hardware volume buttons on iOS, widgets, shortcuts and siri integration for quick access. I'm even hoping to get an app clip working soon!
+
+<div className='flex items-center flex-col'>
+    <img src={appIconUrl} className="w-1/3" alt="Roam app icon"/>
+
+    *Roam app icon*
+</div>
+
+
+## Why I built this remote
+
+I built Roam because every other Roku remote I tried on macOS was either feature incomplete or required in-app purchases.
+
+## Features
+
+-   Runs on Mac, iPhone, iPad, Apple Watch, Vision Pro or Apple TV!
+-   Smart platform integration with keyboard shortcuts on Mac, using hardware volume buttons to control TV Volume on iOS
+-   Use shortcuts and widgets to control your TV without ever opening the app!
+-   Headphones mode (a.k.a. private listening) support on Mac, iPad, iPhone, VisionOS, and Apple TV (play the audio from your TV through your device)
+-   Discover devices on your local network as soon as you open the app
+-   Fast and lightweight, less than 5 MB on all devices and opens in less than half a second!
+-   Open source (https://github.com/msdrigg/roam)
+-   Intuitive design with apple's native SwiftUI design system
+
+<div className="flex flex-row flex-wrap items-center place-items-center justify-center gap-x-16">
+    <div className='flex items-center flex-col min-w-64 h-full max-w-72'>
+        <a href={screenshotMacosUrl}>
+            <img src={screenshotMacosUrl} className="w-full h-full" alt="Roam MacOS screenshot"/>
+        </a>
+
+        <p className='italic -mt-6'>
+            MacOS screenshot
+        </p>
+    </div>
+    <div className='flex items-center flex-col min-w-64 h-full max-w-72'>
+        <a href={screenshotIosUrl}>
+            <img src={screenshotIosUrl} className="w-full h-full drop-shadow-lg" alt="Roam iPhone screenshot"/>
+        </a>
+
+        <p className='italic mt-2'>
+            iPhone screenshot
+        </p>
+    </div>
+    <div className='flex items-center flex-col min-w-64 h-full max-w-72'>
+        <a href={screenshotVisionosUrl}>
+            <img src={screenshotVisionosUrl} className="w-full h-full rounded-md drop-shadow-lg" alt="Roam VisionOS screenshot"/>
+        </a>
+
+        <p className='italic mt-3'>
+            VisionOS screenshot
+        </p>
+    </div>
+</div>
+
+## Want to try it?
+
+If you have a Roku TV or Roku stick, give Roam a try [on the app store](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). If you have any feedback, please let me know on [Twitter](https://twitter.com/msdrigg) or [GitHub](https://github.com/msdrigg/roam/issues).
