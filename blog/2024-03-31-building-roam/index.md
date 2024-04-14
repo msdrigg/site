@@ -5,7 +5,6 @@ authors: msdrigg
 tags:
     - projects
     - ios
-draft: true
 ---
 
 Last year I bought a simple Hisence Roku TV for my living room. The TV comes with a physical remote control and Roku distributes an iOS app that can control it over the local network. But Roku does not offer a MacOS version of this app. I often sit on my couch working on my computer and want to control the TV (for example to mute an ad break) without having to find my phone or a physical remote. I first tried installing a few 3rd party apps "Designed for iPad, not verified for macOS" on my computer, but every one I tried either lacked features or wanted me to pay an absurd $25 yearly subscription to use the remote.
@@ -14,20 +13,24 @@ Interestingly enough, Roku themselves publish a developer remote app for macOS [
 
 I wanted to share a few things I learned about modern cross-platform apple development from building a complete app with little previous swift experience.
 
+![Screenshot](./assets/screenshot-macos.png)
+
 ## Learning the Roku API
 
-The first step I took was to find information on the Roku API. How does the iOS app actually control the TV. Thankfully, Roku publishes a guide to their ECP (External Control Protocol) API [here](https://developer.roku.com/docs/developer-program/dev-tools/external-control-api.md). This ECP API provides a set of commands to control the TV, and several queries that get information about the device's capabilities, installed applications and current state.
+Okay so first things first, I need to figure out what API the TV offers to control it. Thankfully, Roku publishes a guide to their ECP (External Control Protocol) API [here](https://developer.roku.com/docs/developer-program/dev-tools/external-control-api.md). This ECP API provides a set of commands to control the TV, and several queries that get information about the device's capabilities, installed applications and current state.
 
 The parts of the API Roam uses are simple enough to be demonstrated in a few lines of curl.
 
 ```bash
 # Query Device Info
-curl -X GET http://$ROKU_IP:8060/query/device-info
-curl -X GET http://$ROKU_IP:8060
+curl http://$ROKU_IP:8060/query/device-info
+
+
+curl http://$ROKU_IP:8060
 
 # Query App Info
-curl -X GET http://$ROKU_IP:8060/query/apps
-curl -X GET http://$ROKU_IP:8060/query/icon/$APP_ID
+curl http://$ROKU_IP:8060/query/apps
+curl http://$ROKU_IP:8060/query/icon/$APP_ID
 
 # Press any buttons in the Remote
 curl -X POST http://$ROKU_IP:8060/keypress/VolumeUp
@@ -44,6 +47,100 @@ curl -X POST http://$ROKU_IP:8060/launch/$APP_ID
 curl -X POST http://$ROKU_IP:8060/keypress/PowerOff
 curl -X POST http://$ROKU_IP:8060/keypress/PowerOn
 ```
+
+Okay so lets take a look at the device-info query to see what kind of information I can get from the device
+
+```xml
+scottdriggers@Scotts-MBP ~ % curl http://$ROKU_IP:8060/query/device-info
+<?xml version="1.0" encoding="UTF-8" ?>
+<device-info>
+    // highlight-next-line
+	<udn>28001240-0000-1000-8000-80cbbc98790a</udn>
+	<serial-number>X01900SGN8UY</serial-number>
+	<device-id>S0A3619GN8UY</device-id>
+	<advertising-id>7087357d-ec2a-59d4-a821-81fe98fbbd31</advertising-id>
+	<vendor-name>Hisense</vendor-name>
+	<model-name>6Series-50</model-name>
+	<model-number>G218X</model-number>
+	<model-region>US</model-region>
+	<is-tv>true</is-tv>
+	<is-stick>false</is-stick>
+	<screen-size>50</screen-size>
+	<panel-id>7</panel-id>
+	<mobile-has-live-tv>true</mobile-has-live-tv>
+	<ui-resolution>1080p</ui-resolution>
+	<tuner-type>ATSC</tuner-type>
+	<supports-ethernet>true</supports-ethernet>
+    // highlight-next-line
+	<wifi-mac>80:cb:bc:98:79:0a</wifi-mac>
+	<wifi-driver>realtek</wifi-driver>
+	<has-wifi-5G-support>true</has-wifi-5G-support>
+    // highlight-next-line
+	<ethernet-mac>a0:62:fb:78:29:ee</ethernet-mac>
+	<network-type>wifi</network-type>
+	<network-name>Myfi-GL</network-name>
+    // highlight-next-line
+	<friendly-device-name>Hisense•Roku TV - X01900SGN8UY</friendly-device-name>
+	<friendly-model-name>Hisense•Roku TV</friendly-model-name>
+	<default-device-name>Hisense•Roku TV - X01900SGN8UY</default-device-name>
+	<user-device-name />
+	<user-device-location />
+	<build-number>CHD.55E04174A</build-number>
+	<software-version>12.5.5</software-version>
+	<software-build>4174</software-build>
+	<lightning-base-build-number>xxD.50E04182A</lightning-base-build-number>
+	<ui-build-number>CHD.55E04174A</ui-build-number>
+	<ui-software-version>12.5.5</ui-software-version>
+	<ui-software-build>4174</ui-software-build>
+	<secure-device>true</secure-device>
+	<language>en</language>
+	<country>US</country>
+	<locale>en_US</locale>
+	<time-zone-auto>true</time-zone-auto>
+	<time-zone>US/Eastern</time-zone>
+	<time-zone-name>United States/Eastern</time-zone-name>
+	<time-zone-tz>America/New_York</time-zone-tz>
+	<time-zone-offset>-240</time-zone-offset>
+	<clock-format>12-hour</clock-format>
+	<uptime>624847</uptime>
+    // highlight-next-line
+	<power-mode>PowerOn</power-mode>
+	<supports-suspend>true</supports-suspend>
+	<supports-find-remote>false</supports-find-remote>
+	<supports-audio-guide>true</supports-audio-guide>
+	<supports-rva>true</supports-rva>
+	<has-hands-free-voice-remote>false</has-hands-free-voice-remote>
+	<developer-enabled>false</developer-enabled>
+	<keyed-developer-id />
+	<search-enabled>true</search-enabled>
+	<search-channels-enabled>true</search-channels-enabled>
+	<voice-search-enabled>true</voice-search-enabled>
+    // highlight-next-line
+	<supports-private-listening>true</supports-private-listening>
+	<supports-private-listening-dtv>true</supports-private-listening-dtv>
+	<supports-warm-standby>true</supports-warm-standby>
+	<headphones-connected>false</headphones-connected>
+	<supports-audio-settings>false</supports-audio-settings>
+	<expert-pq-enabled>1.0</expert-pq-enabled>
+	<supports-ecs-textedit>true</supports-ecs-textedit>
+	<supports-ecs-microphone>true</supports-ecs-microphone>
+    // highlight-next-line
+	<supports-wake-on-wlan>true</supports-wake-on-wlan>
+	<supports-airplay>true</supports-airplay>
+	<has-play-on-roku>true</has-play-on-roku>
+	<has-mobile-screensaver>false</has-mobile-screensaver>
+	<support-url>hisense-usa.com/support</support-url>
+	<grandcentral-version>11.3.24</grandcentral-version>
+	<supports-trc>true</supports-trc>
+	<trc-version>3.0</trc-version>
+	<trc-channel-version>9.3.10</trc-channel-version>
+	<av-sync-calibration-enabled>3.0</av-sync-calibration-enabled>
+</device-info>
+```
+
+Okay so there's a lot here, but I highlighted the key lines here that Roam can use when it connects to the TV. The `udn` is a unique identifier for the device that is stable over time and across device API's. We can see some network information including wifi and ethernet mac addresses. We can see a friendly device name, that's nice for when we discover the device. We can see the current power state in `power-mode` and we can see if the device supports private listening (headphones mode) and wake on LAN.
+
+Okay this is really all Roam can use currently. There's some other data that I could use in the future like `supports-airplay`, but for now I only use a small subset.
 
 ### Device Discovery with SSDP
 
@@ -285,41 +382,283 @@ There were also a few gotchas with `SwiftData` that needed to be worked around
 
 ## ECP API
 
-So I kind of lied earlier when I said that the protocol was as simple as using curl. The curl commands work, but there is one pretty frustrating inherent limitation to sending a http request per command. Each request can fail or succeed independent of any other request, so if you try to type out "Harry Potter" on your keyboard, some of the letters could get dropped or sent out of order.
+So I lied a little bit earlier when I said that the protocol was as simple as using curl. That API I showed earlier is the _documented_ ECP API, but it is not the one that the official iOS Roku app uses when it connects. Let's use `tcpdump` to capture the data going between the Roku TV and the official Roku iOS app.
 
-This is a pretty frustrating problem that doesn't have a good solution, but thankfully Roku provides a solution in the form of the ECP API over Websockets.
+```bash
+tcpdump -i br-lan -s 0 -w roku.pcap host $ROKU_IP or host $IOS_APP_IP
+```
 
-This Websockets API is a direct translation of the ECP API over HTTP. The websocket connection accepts JSON encoded ECP commands and responds with a success or failure response just like the HTTP API does.
+The home router I use is a gl-inet router which comes with firmware built on top of OpenWRT. So executing this command is as easy as ssh'ing onto the router and running the command.
 
-What makes the Websockets formulation better is that it's reliable and ordered. If the `a` in "Harry Potter" fails, it will get retried again before the `r` is sent. This is a pretty nice guaranty, so I implemented the Websockets API for all commands that affect the device state. I continue to use the HTTP API for any query requests because these don't have the same reliability or ordering requirements.
+The `br-lan` interface is the interface that connects my main local network devices together. If I was using the guest network, I would need to capture on `br-guest`.
 
-The websocket connection can also be used like a pub-sub system to get updates on the device's state, but I don't have a good use for this feature at this time.
+I then opened the Roku app on my phone and started interacting with the TV. After a few minutes of interaction, I stopped the capture and downloaded the file to my computer.
+
+Looking at the capture in Wireshark I can see that there is only one main TCP stream between the Roku TV and the iOS app. Here's what it looks like
+
+![Wireshark Capture](./assets/wireshark-main.png)
+
+Okay so we see it's a websocket connection that uses the `ecp-2` protocol. Oh okay, so this is a websocket version of the same ecp API we saw earlier. Let's see what the messages look like.
+
+Here's are the first few websocket messages sent over the websocket connection from the official Roku iOS app. `<` messages come from the TV and `>` messages are sent by the app.
+
+```json
+// Authentication Challenge
+< {
+<   "notify":"authenticate",
+<   "param-challenge":"3KwH7h3HTmxFziLtrzVg5w==",
+<   "timestamp":"608921.943"
+< }
+
+// Authentication Verification Request
+> {
+>   "param-microphone-sample-rates":"1600",
+>   "param-response":"6yYiyDKcbca3qwig1hylU0dHqUQ=",
+>   "request-id":"1",
+>   "param-client-friendly-name":"roku2@msd3.io",
+>   "request":"authenticate",
+>   "param-has-microphone":"true"
+> }
+
+// Authentication Success Response
+< {
+<   "response":"authenticate",
+<   "response-id":"1",
+<   "status":"200",
+<   "status-msg":"OK"
+< }
+
+// Query Device Info Request
+> {
+>   "request":"query-device-info",
+>   "request-id":"2"
+> }
+
+// Query Media Player Request
+> {
+>   "request":"query-media-player",
+>   "request-id":"3"
+> }
+
+// Query Device Info Response
+< {
+<   "content-data":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxkZXZpY2UtaW5mbz4KCTx1ZG4+MjgwMDEyNDAtMDAwMC0xMDAwLTgwMDAtODBjYmJjOTg3OTBhPC91ZG4+Cgk8dmlydHVhbC1kZXZpY2UtaWQ+UzBBMzYxOUdOOFVZPC92aXJ0dWFsLWRldmljZS1pZD4KCTxzZXJpYWwtbnVtYmVyPlgwMTkwMFNHTjhVWTwvc2VyaWFsLW51bWJlcj4KCTxkZXZpY2UtaWQ+UzBBMzYxOUdOOFVZPC9kZXZpY2UtaWQ+Cgk8YWR2ZXJ0aXNpbmctaWQ+OWVlYmYxNTEtZTUxOS01NzRiLThkZTItOWUwODUzOTBjNDFkPC9hZHZlcnRpc2luZy1pZD4KCTx2ZW5kb3ItbmFtZT5IaXNlbnNlPC92ZW5kb3ItbmFtZT4KCTxtb2RlbC1uYW1lPjZTZXJpZXMtNTA8L21vZGVsLW5hbWU+Cgk8bW9kZWwtbnVtYmVyPkcyMThYPC9tb2RlbC1udW1iZXI+Cgk8bW9kZWwtcmVnaW9uPlVTPC9tb2RlbC1yZWdpb24+Cgk8aXMtdHY+dHJ1ZTwvaXMtdHY+Cgk8aXMtc3RpY2s+ZmFsc2U8L2lzLXN0aWNrPgoJPHNjcmVlbi1zaXplPjUwPC9zY3JlZW4tc2l6ZT4KCTxwYW5lbC1pZD43PC9wYW5lbC1pZD4KCTxtb2JpbGUtaGFzLWxpdmUtdHY+dHJ1ZTwvbW9iaWxlLWhhcy1saXZlLXR2PgoJPHVpLXJlc29sdXRpb24+MTA4MHA8L3VpLXJlc29sdXRpb24+Cgk8dHVuZXItdHlwZT5BVFNDPC90dW5lci10eXBlPgoJPHN1cHBvcnRzLWV0aGVybmV0PnRydWU8L3N1cHBvcnRzLWV0aGVybmV0PgoJPHdpZmktbWFjPjgwOmNiOmJjOjk4Ojc5OjBhPC93aWZpLW1hYz4KCTx3aWZpLWRyaXZlcj5yZWFsdGVrPC93aWZpLWRyaXZlcj4KCTxoYXMtd2lmaS01Ry1zdXBwb3J0PnRydWU8L2hhcy13aWZpLTVHLXN1cHBvcnQ+Cgk8ZXRoZXJuZXQtbWFjPmEwOjYyOmZiOjc4OjI5OmVlPC9ldGhlcm5ldC1tYWM+Cgk8bmV0d29yay10eXBlPmV0aGVybmV0PC9uZXR3b3JrLXR5cGU+Cgk8ZnJpZW5kbHktZGV2aWNlLW5hbWU+SGlzZW5zZeKAolJva3UgVFYgLSBYMDE5MDBTR044VVk8L2ZyaWVuZGx5LWRldmljZS1uYW1lPgoJPGZyaWVuZGx5LW1vZGVsLW5hbWU+SGlzZW5zZeKAolJva3UgVFY8L2ZyaWVuZGx5LW1vZGVsLW5hbWU+Cgk8ZGVmYXVsdC1kZXZpY2UtbmFtZT5IaXNlbnNl4oCiUm9rdSBUViAtIFgwMTkwMFNHTjhVWTwvZGVmYXVsdC1kZXZpY2UtbmFtZT4KCTx1c2VyLWRldmljZS1uYW1lIC8+Cgk8dXNlci1kZXZpY2UtbG9jYXRpb24gLz4KCTxidWlsZC1udW1iZXI+Q0hELjUwRTA0MTc2QTwvYnVpbGQtbnVtYmVyPgoJPHNvZnR3YXJlLXZlcnNpb24+MTIuNS4wPC9zb2Z0d2FyZS12ZXJzaW9uPgoJPHNvZnR3YXJlLWJ1aWxkPjQxNzY8L3NvZnR3YXJlLWJ1aWxkPgoJPGxpZ2h0bmluZy1iYXNlLWJ1aWxkLW51bWJlciAvPgoJPHVpLWJ1aWxkLW51bWJlcj5DSEQuNTBFMDQxNzZBPC91aS1idWlsZC1udW1iZXI+Cgk8dWktc29mdHdhcmUtdmVyc2lvbj4xMi41LjA8L3VpLXNvZnR3YXJlLXZlcnNpb24+Cgk8dWktc29mdHdhcmUtYnVpbGQ+NDE3NjwvdWktc29mdHdhcmUtYnVpbGQ+Cgk8c2VjdXJlLWRldmljZT50cnVlPC9zZWN1cmUtZGV2aWNlPgoJPGxhbmd1YWdlPmVuPC9sYW5ndWFnZT4KCTxjb3VudHJ5PlVTPC9jb3VudHJ5PgoJPGxvY2FsZT5lbl9VUzwvbG9jYWxlPgoJPHRpbWUtem9uZS1hdXRvPnRydWU8L3RpbWUtem9uZS1hdXRvPgoJPHRpbWUtem9uZT5VUy9FYXN0ZXJuPC90aW1lLXpvbmU+Cgk8dGltZS16b25lLW5hbWU+VW5pdGVkIFN0YXRlcy9FYXN0ZXJuPC90aW1lLXpvbmUtbmFtZT4KCTx0aW1lLXpvbmUtdHo+QW1lcmljYS9OZXdfWW9yazwvdGltZS16b25lLXR6PgoJPHRpbWUtem9uZS1vZmZzZXQ+LTMwMDwvdGltZS16b25lLW9mZnNldD4KCTxjbG9jay1mb3JtYXQ+MTItaG91cjwvY2xvY2stZm9ybWF0PgoJPHVwdGltZT4yOTM0OTg1PC91cHRpbWU+Cgk8cG93ZXItbW9kZT5Qb3dlck9uPC9wb3dlci1tb2RlPgoJPHN1cHBvcnRzLXN1c3BlbmQ+dHJ1ZTwvc3VwcG9ydHMtc3VzcGVuZD4KCTxzdXBwb3J0cy1maW5kLXJlbW90ZT5mYWxzZTwvc3VwcG9ydHMtZmluZC1yZW1vdGU+Cgk8c3VwcG9ydHMtYXVkaW8tZ3VpZGU+dHJ1ZTwvc3VwcG9ydHMtYXVkaW8tZ3VpZGU+Cgk8c3VwcG9ydHMtcnZhPnRydWU8L3N1cHBvcnRzLXJ2YT4KCTxoYXMtaGFuZHMtZnJlZS12b2ljZS1yZW1vdGU+ZmFsc2U8L2hhcy1oYW5kcy1mcmVlLXZvaWNlLXJlbW90ZT4KCTxkZXZlbG9wZXItZW5hYmxlZD5mYWxzZTwvZGV2ZWxvcGVyLWVuYWJsZWQ+Cgk8a2V5ZWQtZGV2ZWxvcGVyLWlkIC8+Cgk8c2VhcmNoLWVuYWJsZWQ+dHJ1ZTwvc2VhcmNoLWVuYWJsZWQ+Cgk8c2VhcmNoLWNoYW5uZWxzLWVuYWJsZWQ+dHJ1ZTwvc2VhcmNoLWNoYW5uZWxzLWVuYWJsZWQ+Cgk8dm9pY2Utc2VhcmNoLWVuYWJsZWQ+dHJ1ZTwvdm9pY2Utc2VhcmNoLWVuYWJsZWQ+Cgk8c3VwcG9ydHMtcHJpdmF0ZS1saXN0ZW5pbmc+dHJ1ZTwvc3VwcG9ydHMtcHJpdmF0ZS1saXN0ZW5pbmc+Cgk8c3VwcG9ydHMtcHJpdmF0ZS1saXN0ZW5pbmctZHR2PnRydWU8L3N1cHBvcnRzLXByaXZhdGUtbGlzdGVuaW5nLWR0dj4KCTxzdXBwb3J0cy13YXJtLXN0YW5kYnk+dHJ1ZTwvc3VwcG9ydHMtd2FybS1zdGFuZGJ5PgoJPGhlYWRwaG9uZXMtY29ubmVjdGVkPmZhbHNlPC9oZWFkcGhvbmVzLWNvbm5lY3RlZD4KCTxzdXBwb3J0cy1hdWRpby1zZXR0aW5ncz5mYWxzZTwvc3VwcG9ydHMtYXVkaW8tc2V0dGluZ3M+Cgk8ZXhwZXJ0LXBxLWVuYWJsZWQ+MS4wPC9leHBlcnQtcHEtZW5hYmxlZD4KCTxzdXBwb3J0cy1lY3MtdGV4dGVkaXQ+dHJ1ZTwvc3VwcG9ydHMtZWNzLXRleHRlZGl0PgoJPHN1cHBvcnRzLWVjcy1taWNyb3Bob25lPnRydWU8L3N1cHBvcnRzLWVjcy1taWNyb3Bob25lPgoJPHN1cHBvcnRzLXdha2Utb24td2xhbj50cnVlPC9zdXBwb3J0cy13YWtlLW9uLXdsYW4+Cgk8c3VwcG9ydHMtYWlycGxheT50cnVlPC9zdXBwb3J0cy1haXJwbGF5PgoJPGhhcy1wbGF5LW9uLXJva3U+dHJ1ZTwvaGFzLXBsYXktb24tcm9rdT4KCTxoYXMtbW9iaWxlLXNjcmVlbnNhdmVyPmZhbHNlPC9oYXMtbW9iaWxlLXNjcmVlbnNhdmVyPgoJPHN1cHBvcnQtdXJsPmhpc2Vuc2UtdXNhLmNvbS9zdXBwb3J0PC9zdXBwb3J0LXVybD4KCTxncmFuZGNlbnRyYWwtdmVyc2lvbj4xMC40LjQ1PC9ncmFuZGNlbnRyYWwtdmVyc2lvbj4KCTxzdXBwb3J0cy10cmM+dHJ1ZTwvc3VwcG9ydHMtdHJjPgoJPHRyYy12ZXJzaW9uPjMuMDwvdHJjLXZlcnNpb24+Cgk8dHJjLWNoYW5uZWwtdmVyc2lvbj45LjMuMTA8L3RyYy1jaGFubmVsLXZlcnNpb24+Cgk8YXYtc3luYy1jYWxpYnJhdGlvbi1lbmFibGVkPjMuMDwvYXYtc3luYy1jYWxpYnJhdGlvbi1lbmFibGVkPgo8L2RldmljZS1pbmZvPgo=",
+<   "content-type":"text/xml; charset=\"utf-8\"",
+<   "response":"query-device-info",
+<   "response-id":"2",
+<   "status":"200",
+<   "status-msg":"OK"
+< }
+
+// Query Media Player Response
+< {
+<   "content-data":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiID8+CjxwbGF5ZXIgc3RhdGU9ImNsb3NlIiBlcnJvcj0iZmFsc2UiIC8+Cg==",
+<   "content-type":"text/xml; charset=\"utf-8\"",
+<   "response":"query-media-player",
+<   "response-id":"3",
+<   "status":"200",
+<   "status-msg":"OK"
+< }
+```
+
+Here you can see how requests and responses can be interleaved and matched back up by the `request-id/response-id` fields. This uses the duplex nature of the websocket connection.
+
+The other funny thing you can see is that some of these messages look exactly like the ECP commands from earlier. Lets take a look at the `query-device-info` response. There's a big block of base64 encoded data in the `content-data` field. Let's decode that and see what it looks like.
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<device-info>
+	<udn>28001240-0000-1000-8000-80cbbc98790a</udn>
+	<virtual-device-id>S0A3619GN8UY</virtual-device-id>
+	<serial-number>X01900SGN8UY</serial-number>
+	<device-id>S0A3619GN8UY</device-id>
+	<advertising-id>9eebf151-e519-574b-8de2-9e085390c41d</advertising-id>
+	<vendor-name>Hisense</vendor-name>
+	<model-name>6Series-50</model-name>
+	<model-number>G218X</model-number>
+	<model-region>US</model-region>
+	<is-tv>true</is-tv>
+	<is-stick>false</is-stick>
+	<screen-size>50</screen-size>
+	<panel-id>7</panel-id>
+	<mobile-has-live-tv>true</mobile-has-live-tv>
+	<ui-resolution>1080p</ui-resolution>
+	<tuner-type>ATSC</tuner-type>
+	<supports-ethernet>true</supports-ethernet>
+	<wifi-mac>80:cb:bc:98:79:0a</wifi-mac>
+	<wifi-driver>realtek</wifi-driver>
+	<has-wifi-5G-support>true</has-wifi-5G-support>
+	<ethernet-mac>a0:62:fb:78:29:ee</ethernet-mac>
+	<network-type>ethernet</network-type>
+	<friendly-device-name>Hisense•Roku TV - X01900SGN8UY</friendly-device-name>
+	<friendly-model-name>Hisense•Roku TV</friendly-model-name>
+	<default-device-name>Hisense•Roku TV - X01900SGN8UY</default-device-name>
+	<user-device-name />
+	<user-device-location />
+	<build-number>CHD.50E04176A</build-number>
+	<software-version>12.5.0</software-version>
+	<software-build>4176</software-build>
+	<lightning-base-build-number />
+	<ui-build-number>CHD.50E04176A</ui-build-number>
+	<ui-software-version>12.5.0</ui-software-version>
+	<ui-software-build>4176</ui-software-build>
+	<secure-device>true</secure-device>
+	<language>en</language>
+	<country>US</country>
+	<locale>en_US</locale>
+	<time-zone-auto>true</time-zone-auto>
+	<time-zone>US/Eastern</time-zone>
+	<time-zone-name>United States/Eastern</time-zone-name>
+	<time-zone-tz>America/New_York</time-zone-tz>
+	<time-zone-offset>-300</time-zone-offset>
+	<clock-format>12-hour</clock-format>
+	<uptime>2934985</uptime>
+	<power-mode>PowerOn</power-mode>
+	<supports-suspend>true</supports-suspend>
+	<supports-find-remote>false</supports-find-remote>
+	<supports-audio-guide>true</supports-audio-guide>
+	<supports-rva>true</supports-rva>
+	<has-hands-free-voice-remote>false</has-hands-free-voice-remote>
+	<developer-enabled>false</developer-enabled>
+	<keyed-developer-id />
+	<search-enabled>true</search-enabled>
+	<search-channels-enabled>true</search-channels-enabled>
+	<voice-search-enabled>true</voice-search-enabled>
+	<supports-private-listening>true</supports-private-listening>
+	<supports-private-listening-dtv>true</supports-private-listening-dtv>
+	<supports-warm-standby>true</supports-warm-standby>
+	<headphones-connected>false</headphones-connected>
+	<supports-audio-settings>false</supports-audio-settings>
+	<expert-pq-enabled>1.0</expert-pq-enabled>
+	<supports-ecs-textedit>true</supports-ecs-textedit>
+	<supports-ecs-microphone>true</supports-ecs-microphone>
+	<supports-wake-on-wlan>true</supports-wake-on-wlan>
+	<supports-airplay>true</supports-airplay>
+	<has-play-on-roku>true</has-play-on-roku>
+	<has-mobile-screensaver>false</has-mobile-screensaver>
+	<support-url>hisense-usa.com/support</support-url>
+	<grandcentral-version>10.4.45</grandcentral-version>
+	<supports-trc>true</supports-trc>
+	<trc-version>3.0</trc-version>
+	<trc-channel-version>9.3.10</trc-channel-version>
+	<av-sync-calibration-enabled>3.0</av-sync-calibration-enabled>
+</device-info>
+```
+
+Hey! That's exactly what we got from `curl http://$ROKU_IP:8060/query/device-info`! Okay so we can see that parts of the ECP API are a transliteration of the ECP API over HTTP to a Websockets API.
+
+But what are all these other messages? Well it seems like there is an authorization challenge that the app needs to respond to before the device will accept any commands. So it seems that this is not just an undocumented API but a _private_ API that Roku wants to prevent third-party developers from using.
+
+Thankfully for us, this authorization step is not very secure and others have already reverse engineered it. After some googling I was able to find [RPListening](https://github.com/runz0rd/RPListening) and [roku-audio-receiver](https://github.com/alin23/roku-audio-receiver). These two projects have implemented this authorization handshake in Java and Python respectively.
+
+So in these codebases we are looking for a function that handles the creation of the `param-response` field in the authentication request.
+
+This is pretty straightforward in the `roku-audio-receiver` project.
+
+```python
+KEY = "95E610D0-7C29-44EF-FB0F-97F1FCE4C297"
+
+def char_transform(var1, var2):
+    if ord("0") <= var1 <= ord("9"):
+        var3 = var1 - 48
+    elif ord("A") <= var1 <= ord("F"):
+        var3 = var1 - 65 + 10
+    else:
+        var3 = -1
+
+    if var3 < 0:
+        return chr(var1)
+
+    var2 = 15 - var3 + var2 & 15
+    if var2 < 10:
+        var2 += 48
+    else:
+        var2 = var2 + 65 - 10
+
+    return chr(var2)
+
+AUTH_KEY = "".join(char_transform(ord(c), 9) for c in KEY).encode()
+
+def auth_key(s: str) -> str:
+    return b64encode(sha1(s.encode() + RokuAudio.AUTH_KEY).digest()).decode()
+```
+
+Hmm well this is kinda crazy and I am not sure how they were able to discover this authentication key, but it's simple enough to replicate in swift.
+
+Ok, so lets ask why Roku would do this. Well there are are obviously some performance benefits to using a single persistent connection instead of a bunch of HTTP requests, but there is also a latency cost because the first message after app launch needs to perform the whole websocket authorization dance.
+
+I think it's for a few other reasons. First of all I'm sure Roku likes gating it's core API so that it can later turn off or limit the standard ECP API without affecting the official clients.
+
+More interestingly, a websocket connection allows a reliable and ordered message delivery. With a http-request-per-command model, each request can fail or succeed independent of any other request. This means that when a user tries to type out "Harry Potter" on their keyboard, some of the letters could get dropped or sent out of order. That's not a problem with the websocket connection because the websocket connection guarantees that the `a` in "Harry Potter" will get sent before the `r` (or the connection will fail altogether).
+
+The websocket connection can also be used like a pub-sub system to get updates on the device's state, but I don't have a good use for this feature at this time, so I won't go into it.
 
 ### Getting Connected
 
-The websocket connection is an authenticated websocket connection, so Roam needs to respond to an auth challenge after connecting before the device will accept any commands. Here's how I setup the connection
+Okay so laying it all out here's what we need to do to connect to a Roku TV over the ECP API
 
 1. Connect to the websocket endpoint with the `ecp-2` protocol specifier
 2. Wait for the first message from the device which will be the auth challenge.
 3. Encode the auth response using the secret key `95E610D0-7C29-44EF-FB0F-97F1FCE4C297`.
+4. Send any future commands over the websocket connection.
 
-    The process for encoding the auth response can be seen [here](https://github.com/msdrigg/Roam/blob/80303d2e10eff70a83ea560de8ccf313e29c8ce7/Shared/Backend/ECPSession.swift#L346)
-
-    I wouldn't have been able to do this without referencing the [RPListening](https://github.com/runz0rd/RPListening) or the [roku-audio-receiver](https://github.com/alin23/roku-audio-receiver) projects. These projects include implementations of the ECP Auth API in Python and Java. I used these implementations to understand how the auth challenge works and how to respond to it.
-
-4. Send any future commands over the websocket connection. These commands are sent as JSON encoding of the ECP command including URL, body and any headers. It's honestly pretty messy, but Roam don't have to worry about it because all our ECP commands only include the method and the PATH with no body.
+I use this ECP API for all button presses and keyboard entry - basically any command that changes the state of the TV. I use the standard ECP API for any device information queries because it's simpler and doesn't require the authorization handshake.
 
 ## Navigating the Local Network
 
-So before Roam can connect to the devices, it has to discover them. To find devices, Roam uses a combination of SSDP and local network scanning.
+So before Roam can connect to the devices, it has know what their IP's are. So users can manually enter them, but that's not a great experience. I want to do my best to discover these devices and present them to the user before the users want to control them. To find Roku devices, Roam uses a combination of SSDP and local network scanning.
 
-SSDP works most of the time, but it can fail (it's a UDP multicast protocol after all). Roam uses a full network scan to ensure quicker device discovery when the user requests a device refresh or when the app is first opened.
+SSDP works most of the time, but it can fail. It's a UDP multicast protocol after all. So I setup a full network scan on the device to make this discovery happen quicker and more reliably when the user requests a device refresh or when the app is first opened.
 
 To scan the full local network, Roam needs to make a guess at the local network's DHCP range. Roam does this by getting the device's local IP address and netmask and then estimating the DHCP range from that information. The `Network` framework doesn't provide a way to get detailed device information, so I needed to use the `getifaddrs` function from the BSD sockets API to achieve this. Thankfully, BSD sockets are supported on all apple platforms.
 
-Once it has this device information, Roam then tries to open a TCP connection to each IP address in the DHCP range on port 8060 (the ECP port). If the connection is successful, Roam tries to queries for the device's information using `/query/device-info` and accepts the device if this query succeeds.
+```swift
+private func listInterfacesDarwin() -> [Addressed4NetworkInterface] {
+    var addrList: UnsafeMutablePointer<ifaddrs>?
+    var networkInterfaces: [Addressed4NetworkInterface] = []
 
-This scan is quite slow and expensive but I limit it to only run very infrequently or when the user explicitly requests a device refresh scan. Additionally, I limit the number of scanned IP's to 1024 total and 37 concurrently to prevent the scan from overwhelming the network or taking a huge amount of time. For a typical network (200 or so IP's), these scans usually finish pretty quickly because the TCP connections are set to time out after 1.2 seconds.
+    if getifaddrs(&addrList) == 0 {
+        var ptr = addrList
+        while ptr != nil {
+            defer { ptr = ptr?.pointee.ifa_next }
+            guard let addr = ptr?.pointee else { continue }
+
+            let name = String(cString: addr.ifa_name)
+            let flags = addr.ifa_flags
+            let family = addr.ifa_addr?.pointee.sa_family ?? 0
+
+            var host = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+            if let ifa_addr = addr.ifa_addr {
+                getnameinfo(ifa_addr, socklen_t(ifa_addr.pointee.sa_len),
+                            &host, socklen_t(host.count),
+                            nil, socklen_t(0), NI_NUMERICHOST)
+            }
+
+            var netmask = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+            if let ifa_netmask = addr.ifa_netmask {
+                getnameinfo(ifa_netmask, socklen_t(ifa_netmask.pointee.sa_len),
+                            &netmask, socklen_t(netmask.count),
+                            nil, socklen_t(0), NI_NUMERICHOST)
+            }
+            if family == AF_INET || family == AF_INET6 {
+                let addressString = String(cString: host)
+                let netmaskString = String(cString: netmask)
+                if let address = IP4Address(string: addressString), let netmask = IP4Address(string: netmaskString) {
+                    networkInterfaces.append(Addressed4NetworkInterface(name: name, family: Int32(family), address: address, netmask: netmask, flags: flags, nwInterface: nil))
+                }
+            }
+        }
+        freeifaddrs(addrList)
+    }
+    return networkInterfaces
+}
+```
+
+Here I get the list of interfaces, their addresses and netmask's and some information on the interface's setup (are they IPV4). I then use this information to guess the DHCP range.
+
+Once it has this device information, Roam then tries to open a TCP connection to each IP address in the DHCP range on port 8060 (the ECP port). If the connection is successful, Roam tries to queries for the device's information using `/query/device-info` and adds the device to it's DB if this query succeeds.
+
+This scan is quite slow and expensive but I limit it to only run very infrequently or when the user explicitly requests a device refresh. Additionally, I limit the number of scanned IP's to 1024 total and 37 concurrently to prevent the scan from overwhelming the network or taking a huge amount of time. For a typical network (200 or so IP's), these scans usually finish pretty quickly because the TCP connections are set to time out after 1.2 seconds.
 
 When I first added support for SSDP and WOL, these features worked correctly on macOS and even in the iOS simulator, but failed to work on real iOS devices. After some digging, I found that sending multicast packets requires a [specific capability](https://forums.developer.apple.com/forums/thread/663271), and I would need to request this capability from Apple support to get it enabled for my account. The macOS networking stack doesn't have the same restrictions, so it worked fine there even without the capability.
 
@@ -329,7 +668,7 @@ Additionally, on WatchOS complex networking isn't supported at all. This means t
 
 So the last feature of Roam I haven't discussed much is Headphones mode. As I mentioned previously, Roku TV's supports a headphones mode to stream audio from the TV to the remote application. The official Roku app supports this functionality, but I haven't seen another 3rd party app that supports it. I wanted to support this feature because it's a feature I use a lot and I knew it would set my app apart.
 
-My first step was to setup `tcpdump` on my home router to capture traffic between my phone and the Roku TV. I was able to see some RTCP traffic on port 6970 and RTP traffic on port 5150 using packet type 97. There were also some commands sent over ECP that seemed like RTP initiation.
+My first step was to setup `tcpdump` on my home router to capture traffic between my phone and the Roku TV. I was able to see some RTP traffic on port 6970 and RTCP traffic on port 5150 using packet type 97. There were also some commands sent over ECP that seemed like RTP initiation.
 
 From here I did some googling and found two projects that had implemented the audio streaming protocol for Roku TV's.
 
