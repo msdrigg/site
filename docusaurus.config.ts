@@ -29,6 +29,9 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  markdown: {
+    mermaid: true
+  },
 
   presets: [
     [
@@ -45,6 +48,7 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
+  themes: ['@docusaurus/theme-mermaid'],
 
   themeConfig: {
     navbar: {
@@ -90,6 +94,7 @@ const config: Config = {
         "bash", "swift", "json", "diff", "shell-session"
       ],
     },
+
   } satisfies Preset.ThemeConfig,
   plugins: [
     [

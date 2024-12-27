@@ -9,6 +9,8 @@ tags:
 
 Last year I bought a simple Hisence Roku TV for my living room. The TV comes with a physical remote control and Roku distributes an iOS app that can control it over the local network. But Roku does not offer a MacOS version of this app. I often sit on my couch working on my computer and want to control the TV (for example to mute an ad break) without having to find my phone or a physical remote. I first tried installing a few 3rd party apps "Designed for iPad, not verified for macOS" on my computer, but every one I tried either lacked features or wanted me to pay an absurd $25 yearly subscription to use the remote.
 
+<!-- truncate -->
+
 Interestingly enough, Roku themselves publish a developer remote app for macOS [here](https://devtools.web.roku.com/RokuRemote/), but it's built for large-scale device testing/scripting and it doesn't even have a power-on/off button. I did use this dev tool as my go-to remote for a few months, but eventually I got fed up and decided to build the remote app I wanted to use.
 
 I wanted to share a few things I learned about modern cross-platform apple development from building a complete app with little previous swift experience.
