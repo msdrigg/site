@@ -116,11 +116,11 @@ I did consider breaking this out into a separate swift package, but I think Roam
 
 So as with any mobile-app backend, there were a lot of security challenges I encountered as I built this backend. First of all, how can I authenticate users when my app is open source and I don't have any user passwords. My (rather naive) approach is to auto-generating a 9-character user ID for each device. This allows for about 5.5 trillion possible unique ID, so if my API got hit at discord's 50 req/s rate limit then an attacker would be able to find a user's messages in about 3000 years and I would notice long before that. I could (and will) make this user ID longer but the data involved isn't sensitive enough that I'm worried about it.
 
-Each request also contains a API Key that isn't public and the backend url also isn't published directly in the source code on github (it is added alter in a config file via env variables). So I do have a little bit of security-through-obscurity as well. But I am aware that these roadblocks would not stop a dedicated attacker who could access these variables by decrypting the application after they install it on their device.
+Each request also contains a API Key that isn't public and the backend url also isn't published directly in the source code on github (it is added after in a config file via an env variable). So I do have a little bit of security-through-obscurity as well. But I am aware that these roadblocks would not stop a dedicated attacker who could access these variables by decrypting the application after they install it on their device.
 
-Finally, I will say that my security could be significantly better. First of all, I am susceptible to DOS attacks. If an attacker was to send thousands of requests to my backend, there is nothing in place to stop them and they would get my discord bot rate limited and possibly banned. They would also be able to flood my discord channels making them unusable, but they would not be able to read any other user's messages or rack up any fees on my end because cloudflare workers are capped under the free tier.
+Finally, I will say that there is room to improve my backend security. First of all, I am susceptible to DOS attacks. If an attacker was to send thousands of requests to my backend, there would be nothing to stop them and eventually my discord bot would be rate limited and/or banned. They would also be able to flood my discord channels making them unusable, but they would not be able to read any other user's messages or rack up any fees on my end because cloudflare workers are capped under the free tier.
 
-I will say that if I needed to worry about rate-limits and DOS attacks I would start by requiring all requests to contain a unique and valid APNS token, and then rate limiting individual users. This way I could slow down bad-acting individual users and then ban them while preventing the attackers from creating new users without a new valid APNS token (which isn't easy to get without manual human input). In this way, Apple would basically be my user-verification service to ensure that all my users are real people and not bots.
+I will say that if I needed to worry about rate-limits and DOS attacks I would start by requiring user sign-ups to contain a unique and valid APNS token, and I would add reasonable rate limits for individual users. This way I could slow down bad-acting individuals and then ban them while preventing the attackers from creating new users without creating a new valid APNS token (which isn't easy to get without manual human input). In this way, Apple would basically be my user-verification service to ensure that all my users are real people and not bots.
 
 ## Conclusion
 
@@ -138,3 +138,13 @@ Overall this work has yielded some very rewarding interactions with people. Seve
 I have also had two other developers reach out to say that they thought the app was really impressive and they appreciated it. One of them was a developer at Warner-Brothers/Max and said he had recommended it to his whole team there.
 
 I think an in-app messaging feature is probably a bit overkill for an app as simple as Roam, but it has let me connect with my users in a way that would not have been possible without it.
+
+## Addendum: Moved it all to fly.io + rust
+
+I have moved my whole infrastructure off of cloudflare workers due to the workers egress IP getting banned from discord.
+
+Despite having a cloudflare workers setup guide, every workers bot got IP banned because there isn't a way to setup a dedicated egress IP for a worker. On top of that, Discord has a long-ish standing issue with no workarounds shown: [https://github.com/discord/discord-api-docs/issues/7146](https://github.com/discord/discord-api-docs/issues/7146).
+
+Even though the IP was unbanned after a week, but I had already finished re-writing my backend to run within the fly.io rust server. I didn't change anything about the API but I like the rust version better anyway, so that's what I will be using going forward. Take a look [here](https://github.com/msdrigg/Roam/tree/main/backend)
+
+The biggest thing that scarred me initially was the database, but I just setup a simple sqlite db running on a fly volume. These get backed up every day and I can go back and restore it if anything happens.
