@@ -40,7 +40,7 @@ The only tricky piece of this system is that all requests to the KV storage plat
 
 On the Discord side, I considered several methods for how to handle multiple independent user message threads. To meet my needs, each user's messages would need to be handled independently, and I would also need to be able to query ALL recent messages for ANY users for the purpose of sending push notifications. This query requirement prevented me from using a channel-per-user because there isn't an API to request all messages across all channels in a server. Instead I ended up using Discord's [Forum Channels](https://support.discord.com/hc/en-us/articles/6208479917079-Forum-Channels-FAQ) model. A single one of these channels contains individual sub-threads that are meant to be used as individual Q&A's from within a single larger channel. This works perfect for my use case because I can create one thread per user and then route all the users messages to their own self-contained thread while at the same time querying for the most recent messages in that channel and receive all the messages for across all users.
 
-You can find the code for my whole backend at this link: [https://github.com/msdrigg/Roam/tree/main/backend](https://github.com/msdrigg/Roam/tree/main/backend).
+You can find the code for my whole backend at this link: [https://github.com/msdrigg/Roam/tree/1af2f006edd3cf10537efbaf9f65e92de0848d96/backend](https://github.com/msdrigg/Roam/tree/1af2f006edd3cf10537efbaf9f65e92de0848d96/backend).
 
 ### Push Notifications
 
@@ -54,7 +54,7 @@ One final thing to note is that all communication with Apple must be over HTTP-2
 
 On the whole, the backend is done with 0 node-js dependencies and only 4 direct rust dependencies, so everything works with very little code that I am relying on to make everything work.
 
-You can find the whole code for the gateway engine here [https://github.com/msdrigg/Roam/tree/main/gateway-backend](https://github.com/msdrigg/Roam/tree/main/gateway-backend), and my code for sending APNS requests here [https://github.com/msdrigg/Roam/blob/a46652598584b39e4069afc820d6d2a8f97faef2/backend/src/apns.ts](https://github.com/msdrigg/Roam/blob/a46652598584b39e4069afc820d6d2a8f97faef2/backend/src/apns.ts)
+You can find the whole code for the gateway engine here [https://github.com/msdrigg/Roam/tree/1af2f006edd3cf10537efbaf9f65e92de0848d96/backend-gateway](https://github.com/msdrigg/Roam/tree/1af2f006edd3cf10537efbaf9f65e92de0848d96/backend-gateway), and my code for sending APNS requests here [https://github.com/msdrigg/Roam/blob/a46652598584b39e4069afc820d6d2a8f97faef2/backend/src/apns.ts](https://github.com/msdrigg/Roam/blob/a46652598584b39e4069afc820d6d2a8f97faef2/backend/src/apns.ts)
 
 ### Sending Diagnostics
 
@@ -141,10 +141,16 @@ I think an in-app messaging feature is probably a bit overkill for an app as sim
 
 ## Addendum: Moved it all to fly.io + rust
 
-I have moved my whole infrastructure off of cloudflare workers due to the workers egress IP getting banned from discord.
+So last week the cloudflare workers egress IP got banned for 6 days by discord. This meant that my whole messaging infrastructure was down for a week and I had no easy recourse. There is no way to choose (or even pay for) a dedicated egress IP for a Cloudflare Workers, and Discord says there's no way around this [https://github.com/discord/discord-api-docs/issues/7146](https://github.com/discord/discord-api-docs/issues/7146).
 
-Despite having a cloudflare workers setup guide, every workers bot got IP banned because there isn't a way to setup a dedicated egress IP for a worker. On top of that, Discord has a long-ish standing issue with no workarounds shown: [https://github.com/discord/discord-api-docs/issues/7146](https://github.com/discord/discord-api-docs/issues/7146).
+I thought cloudflare workers was a safe bet because Discord even has a setup guide for how to host a bot on Cloudflare Workers but unfortunately I was mistaken.
 
-Even though the IP was unbanned after a week, but I had already finished re-writing my backend to run within the fly.io rust server. I didn't change anything about the API but I like the rust version better anyway, so that's what I will be using going forward. Take a look [here](https://github.com/msdrigg/Roam/tree/main/backend)
+So I rewrote my whole backend in pure Rust + sqlite to replace the workers backend. It wasn't too hard but it was much more annoying than it needed to be because my whole storage infrastructure was based off CF Workers primitives (kv store and durable objects). Thankfully I was able to export all the data and am back up only a few days downtime.
 
-The biggest thing that scarred me initially was the database, but I just setup a simple sqlite db running on a fly volume. These get backed up every day and I can go back and restore it if anything happens.
+Even though the IP was unbanned after 6 days, I had already finished re-writing my backend to run within the fly.io rust server, and I like having the peace of mind that I can purchase a dedicated egress IP if I need one.
+
+In the rewrite I didn't change anything about the API but I cleaned a lot of stuff up and got to use the rust concurrency primitives which are a lot nicer than what's available in JS. And on top of that I simplified my infrastructure to a single container that I can host anywhere!
+
+The biggest thing that scarred me initially about hosting in a single container was the database. I was worried about managing volumes and what happens if the disk fails, but I just setup a simple sqlite db running on a fly volume. These get backed up every day and I can go back and restore it if anything happens.
+
+Take a look if you're interested in the improvements [https://github.com/msdrigg/Roam/tree/3da8afb5017de5fdfc39a4dbb7a0b15c2d7078b9/backend](https://github.com/msdrigg/Roam/tree/3da8afb5017de5fdfc39a4dbb7a0b15c2d7078b9/backend)
