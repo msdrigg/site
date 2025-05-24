@@ -1,7 +1,7 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import styles from "./timeline.module.css";
 
-export function Timeline(props: PropsWithChildren): JSX.Element {
+export function Timeline(props: PropsWithChildren): ReactNode {
     return (
         <div className={styles.timelineSection}>
             <div className={styles.timelineItems}>{props.children}</div>
@@ -11,7 +11,7 @@ export function Timeline(props: PropsWithChildren): JSX.Element {
 
 export function TimelineItem(
     props: PropsWithChildren<{ date: string }>
-): JSX.Element {
+): ReactNode {
     return (
         <div className={styles.timelineItem}>
             <div className={styles.timelineDot}></div>

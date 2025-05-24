@@ -41,7 +41,7 @@
 }
 .button text {
     fill: var(--ifm-color-primary);
-    font: 0.7rem;
+    font-size: 0.7rem;
 }
 .colorLegend text,
 .play text,

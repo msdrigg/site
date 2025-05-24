@@ -4,8 +4,9 @@ import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
 import { Timeline, TimelineItem } from "../components/Timeline/Timeline";
+import { ReactNode } from "react";
 
-export default function Home(): JSX.Element {
+export default function Home(): ReactNode {
     return (
         <Layout
             title={`Hello from Scott Driggers`}

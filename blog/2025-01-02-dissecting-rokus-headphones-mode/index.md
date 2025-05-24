@@ -20,8 +20,8 @@ draft: true
 
 ## How can we learn more
 
--   ![0 google results for "Roku LibSAS" or "Roku mobile-sas"](./assets/roku-libsas-google.png)
--   ![Nothing on the internet about it](./assets/roku-libsas-rokudev.png)
+-   ![0 google results for "Roku LibSAS" or "Roku mobile-sas"](assets/roku-libsas-google.png)
+-   ![Nothing on the internet about it](assets/roku-libsas-rokudev.png)
 
 Lets try reverse engineering it.
 

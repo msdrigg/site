@@ -15,7 +15,7 @@ Interestingly enough, Roku themselves publish a developer remote app for macOS [
 
 I wanted to share a few things I learned about modern cross-platform apple development from building a complete app with little previous swift experience.
 
-![Screenshot](./assets/screenshot-macos.png)
+![Screenshot](assets/screenshot-macos.png)
 
 ## Learning the Roku API
 
@@ -398,7 +398,7 @@ I then opened the Roku app on my phone and started interacting with the TV. Afte
 
 Looking at the capture in Wireshark I can see that there is only one main TCP stream between the Roku TV and the iOS app. Here's what it looks like
 
-![Wireshark Capture](./assets/wireshark-main.png)
+![Wireshark Capture](assets/wireshark-main.png)
 
 Okay so we see it's a websocket connection that uses the `ecp-2` protocol. Oh okay, so this is a websocket version of the same ecp API we saw earlier. Let's see what the messages look like.
 
@@ -856,7 +856,7 @@ This was a lot of extra code non-essential feature, but I got an explicit reques
 
 I also added a feature to "gift" the Roam app to a friend. This feature shares a link to the app store listing for Roam.
 
-![Gifting Roam](./assets/gift-roam.png)
+![Gifting Roam](assets/gift-roam.png)
 
 Credit where credit is due: I also copied this feature from the Paper Editor.
 
