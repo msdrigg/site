@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 :root {
     --ifm-color-primary: #4b8241;
@@ -52,4 +52,10 @@
 
 span.footer__link-separator {
     visibility: hidden;
+    margin: 0 0.5rem;
+    display: inline;
+}
+
+.footer__link-item {
+    display: inline;
 }

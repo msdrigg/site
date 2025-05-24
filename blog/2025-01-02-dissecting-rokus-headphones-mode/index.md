@@ -42,4 +42,6 @@ Ohh, it's encrypted. Google "Decrypted download ios app. Find https://decrypt.da
     -   https://ocw.mit.edu/courses/6-451-principles-of-digital-communication-ii-spring-2005/43162a4e10d73639903282f4dd58001b_chap9.pdf
 -   Uses a udp protocol to send/receive the data stream
 
+<!-- truncate -->
+
 -   ## Can we get anything else out of reversing the android app?

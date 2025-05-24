@@ -26,6 +26,8 @@ Work in progress
     -   No apple pay docs on the codes. Could I somehow use the URLCompression framework to reverse engineer these codes to see what URL they were hitting?
     -   Unfortunately no in-browser app clip code generation or scanning. The whole code SVG is sent over the wire to the device
 
+<!-- truncate -->
+
 # Code Structure
 
 -   Data Color 0, 1, 2
