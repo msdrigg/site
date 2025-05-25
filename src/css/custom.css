@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
+ol {
+    list-style-type: decimal;
+}
+
+ul {
+    list-style-type: circle;
+}
+
 :root {
     --ifm-color-primary: #4b8241;
     --ifm-color-primary-dark: #437446;

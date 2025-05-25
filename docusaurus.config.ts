@@ -91,7 +91,7 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
       additionalLanguages: [
-        "bash", "swift", "json", "diff", "shell-session"
+        "bash", "swift", "json", "diff", "shell-session", "log"
       ],
     },
 
