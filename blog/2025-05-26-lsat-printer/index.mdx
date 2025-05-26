@@ -1,0 +1,37 @@
+---
+slug: lsat-json-renderer
+title: Rendering LSAT JSON 
+authors: msdrigg
+tags:
+    - projects
+---
+
+import LSATRenderer from './LSATRenderer.tsx';
+
+I created this tool to render the LSAT tests available on app.lawhub.com as HTML to allow easy PDF printing.
+
+{/* truncate */}
+
+I have pre-downloaded some of the free LSAT tests available on the site, so you can select from `140`, `141`, `157`, and `158` in the dropdown below. If you want to render a different test, you will need to download the JSON data for that test from your own lawhub account and paste it into the text area yourself.
+
+<details>
+<summary>
+How to get access the LSAT test JSON data:
+</summary>
+
+
+1. Go to [app.lawhub.org](https://app.lawhub.org) and login.
+2. Click on "LSAT Test Prep" in the left hand menu and then click "New Test" on the test you want to print.
+    - ![Navigate to "LSAT Test Prep" and click on "New Test"](./assets/lsat-download-1.png)
+3. Open the developer console in your browser (usually F12 or right-click and select "Inspect").
+    - ![Open developer console](./assets/lsat-download-2.png)
+4. Click on "Start Test" so your browser will download the test data.
+5. In the developer console, go to the "Network" tab and search for `/instances` in the filter box.
+    - ![Search for /instances in the Network tab](./assets/lsat-download-3.png)
+6. You should see a few items that show `GET`. Select on any one of these and then go to the "Response" tab in the right pane.
+    - ![Select a GET request and go to the Response tab](./assets/lsat-download-4.png)
+7. Copy the JSON data from the response tab.
+8. Select 'Render my own LSAT JSON' from the dropdown below, and paste your copied data into the text area below.
+</details>
+
+<LSATRenderer/>

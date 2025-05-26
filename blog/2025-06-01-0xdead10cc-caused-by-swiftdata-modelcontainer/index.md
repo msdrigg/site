@@ -8,6 +8,8 @@ tags:
 draft: true
 ---
 
+I'm writing today about another tricky crash I investigated in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). Unlike the [previous post](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket%20copy.md) in my troubleshooting journey, the iOS crash reporter actually caught this crash. What made this crash trickier was the fact that the XCode crash viewer obfucse
+
 ```
 Over the past few months I have been working on diagnosing and fixing as many of the crashes I can in my Roku remote app ([Roam](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197)).
 
