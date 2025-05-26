@@ -7,6 +7,7 @@ const LSATRenderer = () => {
     const [parsedData, setParsedData] = useState(null);
     const [error, setError] = useState("");
     const [selectedTest, setSelectedTest] = useState("");
+    const [printMode, setPrintMode] = useState("everything");
 
     const cleanHtmlText = (text) => {
         if (!text) return "";
@@ -166,8 +167,16 @@ const LSATRenderer = () => {
 
         return (
             <>
-                <div className="page-break"></div>
-                <div className="answer-key-section">
+                <div
+                    className={`page-break ${
+                        printMode === "test" ? "print-hidden" : ""
+                    }`}
+                ></div>
+                <div
+                    className={`answer-key-section ${
+                        printMode === "test" ? "print-hidden" : ""
+                    }`}
+                >
                     <h1 className="answer-key-title">Answer Key</h1>
 
                     <div className="quick-answers">
@@ -185,15 +194,25 @@ const LSATRenderer = () => {
                         </div>
                     </div>
 
-                    <div className="page-break"></div>
-                    <h1 className="explanations-title">
+                    <div
+                        className={`page-break ${
+                            printMode === "test" ? "print-hidden" : ""
+                        }`}
+                    ></div>
+                    <h1
+                        className={`explanations-title ${
+                            printMode === "test" ? "print-hidden" : ""
+                        }`}
+                    >
                         Detailed Explanations
                     </h1>
 
                     {allQuestions.map((q) => (
                         <div
                             key={`exp-${q.sectionNumber}-${q.position}`}
-                            className="explanation-block"
+                            className={`explanation-block ${
+                                printMode === "test" ? "print-hidden" : ""
+                            }`}
                         >
                             <h3>
                                 Question {q.position} - Correct Answer: (
@@ -252,18 +271,23 @@ const LSATRenderer = () => {
           margin: 0 auto;
           font-family: 'Times New Roman', serif;
           font-size: 12px;
+          background-color: var(--ifm-background-color);
+          color: var(--ifm-font-color-base);
         }
 
         .input-section {
-          background: #f5f5f5;
+          background: oklch(0.95 0.01 0 / 0.2);
           padding: 20px;
           margin-bottom: 20px;
           border-radius: 8px;
+          border: 1px solid oklch(0.85 0.01 0 / 0.3);
+          font-size: 14px;
+          font-family: sans-serif;
         }
 
         .input-section h2 {
           margin-top: 0;
-          color: #333;
+          color: var(--ifm-font-color-base);
         }
 
         .test-selector {
@@ -274,17 +298,18 @@ const LSATRenderer = () => {
           display: block;
           margin-bottom: 5px;
           font-weight: bold;
-          color: #333;
+          color: var(--ifm-font-color-base);
         }
 
         .test-dropdown {
           width: 100%;
           max-width: 300px;
           padding: 8px;
-          border: 1px solid #ddd;
+          border: 1px solid oklch(0.8 0.01 0 / 0.4);
           border-radius: 4px;
           font-size: 14px;
-          background-color: white;
+          background-color: var(--ifm-background-color);
+          color: var(--ifm-font-color-base);
         }
 
         .json-input {
@@ -293,26 +318,28 @@ const LSATRenderer = () => {
           font-family: 'Courier New', monospace;
           font-size: 12px;
           padding: 10px;
-          border: 1px solid #ddd;
+          border: 1px solid oklch(0.8 0.01 0 / 0.4);
           border-radius: 4px;
           resize: vertical;
+          background-color: var(--ifm-background-color);
+          color: var(--ifm-font-color-base);
         }
 
         .error {
-          color: #d32f2f;
+          color: oklch(0.5 0.15 15 / 1);
           font-weight: bold;
           margin-top: 10px;
         }
 
         .document-section {
-          background: white;
+          background: var(--ifm-background-color);
           min-height: 100vh;
         }
 
         .header {
           text-align: center;
           margin-bottom: 40px;
-          border-bottom: 2px solid #333;
+          border-bottom: 2px solid var(--ifm-font-color-base);
           padding-bottom: 20px;
         }
 
@@ -320,13 +347,14 @@ const LSATRenderer = () => {
           font-size: 24px;
           font-weight: bold;
           margin-bottom: 10px;
+          color: var(--ifm-font-color-base);
         }
 
         .description {
           font-size: 14px;
           font-style: italic;
           margin-bottom: 20px;
-          color: #666;
+          color: oklch(0.6 0.01 0 / 0.8);
         }
 
         .section {
@@ -338,14 +366,16 @@ const LSATRenderer = () => {
           font-weight: bold;
           margin-bottom: 20px;
           text-decoration: underline;
+          color: var(--ifm-font-color-base);
         }
 
         .directions {
-          background-color: #f9f9f9;
+          background-color: oklch(0.92 0.01 0 / 0.3);
           padding: 15px;
-          border-left: 4px solid #333;
+          border-left: 4px solid var(--ifm-font-color-base);
           margin-bottom: 30px;
           font-size: 14px;
+          color: var(--ifm-font-color-base);
         }
 
         .question-block {
@@ -357,15 +387,16 @@ const LSATRenderer = () => {
           font-size: 16px;
           font-weight: bold;
           margin-bottom: 15px;
-          color: #333;
+          color: var(--ifm-font-color-base);
         }
 
         .stimulus {
-          background-color: #fafafa;
+          background-color: oklch(0.94 0.01 0 / 0.2);
           padding: 20px;
-          border: 1px solid #ddd;
+          border: 1px solid oklch(0.85 0.01 0 / 0.3);
           margin-bottom: 20px;
           border-radius: 4px;
+          color: var(--ifm-font-color-base);
         }
 
         .stimulus-paragraph {
@@ -378,6 +409,7 @@ const LSATRenderer = () => {
           font-weight: bold;
           margin-bottom: 15px;
           font-size: 16px;
+          color: var(--ifm-font-color-base);
         }
 
         .options {
@@ -415,13 +447,15 @@ const LSATRenderer = () => {
           font-weight: bold;
           text-align: center;
           margin-bottom: 30px;
-          border-bottom: 2px solid #333;
+          border-bottom: 2px solid var(--ifm-font-color-base);
           padding-bottom: 10px;
+          color: var(--ifm-font-color-base);
         }
 
         .quick-answers h2 {
           font-size: 18px;
           margin-bottom: 20px;
+          color: var(--ifm-font-color-base);
         }
 
         .answers-grid {
@@ -433,9 +467,10 @@ const LSATRenderer = () => {
 
         .quick-answer {
           padding: 8px;
-          background: #f0f0f0;
+          background: oklch(0.93 0.01 0 / 0.4);
           border-radius: 4px;
           text-align: center;
+          color: var(--ifm-font-color-base);
         }
 
         .explanation-block {
@@ -446,38 +481,41 @@ const LSATRenderer = () => {
         .explanation-block h3 {
           font-size: 16px;
           margin-bottom: 15px;
-          color: #333;
+          color: var(--ifm-font-color-base);
         }
 
         .explanation {
           margin-bottom: 10px;
           padding: 12px;
-          border-left: 4px solid #007bff;
+          border-left: 4px solid oklch(0.6 0.15 230 / 1);
           margin-left: 10px;
+          color: var(--ifm-font-color-base);
         }
 
         .explanation.correct-exp {
-          border-left-color: #28a745;
-          background-color: #f8fff8;
+          border-left-color: oklch(0.6 0.15 150 / 1);
+          background-color: oklch(0.9 0.05 150 / 0.2);
         }
 
         .explanation.incorrect-exp {
-          border-left-color: #dc3545;
-          background-color: #fff8f8;
+          border-left-color: oklch(0.6 0.15 15 / 1);
+          background-color: oklch(0.9 0.05 15 / 0.2);
         }
 
         .explanation-header {
           font-weight: bold;
           margin-bottom: 5px;
+          color: var(--ifm-font-color-base);
         }
 
         .explanation-text {
           line-height: 1.5;
+          color: var(--ifm-font-color-base);
         }
 
         .generation-date {
           font-size: 12px;
-          color: #666;
+          color: oklch(0.6 0.01 0 / 0.8);
           margin-bottom: 10px;
         }
 
@@ -507,6 +545,10 @@ const LSATRenderer = () => {
           
           .answer-key-section {
             margin-top: 0;
+          }
+          
+          .print-hidden {
+            display: none !important;
           }
         }
       `}</style>
@@ -538,6 +580,22 @@ const LSATRenderer = () => {
                         <option value="custom">Render my own LSAT JSON</option>
                     </select>
                 </div>
+
+                {parsedData && (
+                    <div className="test-selector">
+                        <label htmlFor="print-mode-dropdown">Print Mode:</label>
+                        <select
+                            id="print-mode-dropdown"
+                            className="test-dropdown"
+                            value={printMode}
+                            onChange={(e) => setPrintMode(e.target.value)}
+                        >
+                            <option value="everything">Print Everything</option>
+                            <option value="test">Print Test Only</option>
+                            <option value="answers">Print Answers Only</option>
+                        </select>
+                    </div>
+                )}
 
                 {selectedTest === "custom" && (
                     <textarea
@@ -586,7 +644,9 @@ const LSATRenderer = () => {
                     {parsedData.module?.sections?.map((section, sectionIdx) => (
                         <div
                             key={section.sectionId || sectionIdx}
-                            className="section"
+                            className={`section ${
+                                printMode === "answers" ? "print-hidden" : ""
+                            }`}
                         >
                             <div className="section-header">
                                 Section {sectionIdx + 1}:{" "}

@@ -8,13 +8,17 @@ tags:
 
 import LSATRenderer from './LSATRenderer.tsx';
 
-I created this tool to render the LSAT tests available on app.lawhub.com as HTML to allow easy PDF printing.
+<p className="print:hidden">
+I created this tool to render the LSAT tests available on LawHub as HTML to allow easy PDF printing and paper test prep.
+</p>
 
 {/* truncate */}
 
+<p className="print:hidden">
 I have pre-downloaded some of the free LSAT tests available on the site, so you can select from `140`, `141`, `157`, and `158` in the dropdown below. If you want to render a different test, you will need to download the JSON data for that test from your own lawhub account and paste it into the text area yourself.
+</p>
 
-<details>
+<details className="print:hidden">
 <summary>
 How to get access the LSAT test JSON data:
 </summary>

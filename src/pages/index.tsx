@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 
 function HomepageHeader() {
     return (
-        <header className={clsx("text--center")}>
+        <header className="text--center print:hidden">
             <div className="container">
                 <div className="avatar avatar--vertical">
                     <img
