@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 
-const preloadedItems = ["140.json", "141.json", "157.json", "158.json"];
+const preloadedItemPromises = {
+    "140.json": import("./tests/140.json"),
+    "141.json": import("./tests/141.json"),
+    "157.json": import("./tests/157.json"),
+    "158.json": import("./tests/158.json"),
+};
+
+async function importTest(filename: string) {
+    if (preloadedItemPromises[filename]) {
+        return await preloadedItemPromises[filename];
+    } else {
+        throw new Error(`Test file ${filename} not found`);
+    }
+}
 
 const LSATRenderer = () => {
     const [jsonInput, setJsonInput] = useState("");
@@ -9,7 +22,7 @@ const LSATRenderer = () => {
     const [selectedTest, setSelectedTest] = useState("");
     const [printMode, setPrintMode] = useState("everything");
 
-    const cleanHtmlText = (text) => {
+    const cleanHtmlText = (text: string | null) => {
         if (!text) return "";
 
         // For simple text cleaning (fallback)
@@ -73,7 +86,7 @@ const LSATRenderer = () => {
             setError("");
         } else if (filename) {
             try {
-                let parsed = await import(`./tests/${filename}`);
+                let parsed = await importTest(filename);
                 setParsedData(parsed);
                 setError("");
             } catch (err) {
@@ -572,7 +585,7 @@ const LSATRenderer = () => {
                         onChange={handleTestSelection}
                     >
                         <option value="">-- Choose a test --</option>
-                        {preloadedItems.map((filename) => (
+                        {Object.keys(preloadedItemPromises).map((filename) => (
                             <option key={filename} value={filename}>
                                 Test {filename.replace(".json", "")}
                             </option>
