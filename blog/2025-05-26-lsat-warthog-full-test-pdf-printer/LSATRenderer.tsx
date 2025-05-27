@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Heading from "@theme/Heading";
 import "./LSATRenderer.css";
+import Link from "@docusaurus/Link";
 
 const preloadedTestPromises = {
     "140.json": import("./tests/140.json"),
@@ -10,8 +11,8 @@ const preloadedTestPromises = {
 };
 
 type TestData = {
-    module: {
-        moduleName: string;
+    module?: {
+        moduleName?: string;
         description?: string;
         sections: Array<{
             sectionId?: string;
@@ -25,15 +26,15 @@ type QuestionData = {
     stimulusText?: string;
     stemText?: string;
     options?: Array<{
-        optionLetter: string;
-        optionContent: string;
+        optionLetter?: string;
+        optionContent?: string;
     }>;
     correctAnswer?: string;
     hintGroup?: Array<{
         answerOptionExplanation?: Array<{
-            optionLetter: string;
-            explanation: string;
-            isCorrect: boolean;
+            optionLetter?: string;
+            explanation?: string;
+            isCorrect?: boolean;
         }>;
     }>;
 };
@@ -212,7 +213,11 @@ function LSATRenderer() {
                                 day: "numeric",
                                 hour: "numeric",
                                 minute: "2-digit",
-                            })}
+                            })}{" "}
+                            by{" "}
+                            <Link href={`${window.location.href}`}>
+                                LSAT Warthog
+                            </Link>
                         </div>
                     </div>
 
