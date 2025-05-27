@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import Heading from "@theme/Heading";
-import "./LSATRenderer.css";
 import Link from "@docusaurus/Link";
+import "./LSATRenderer.css";
+import PrintableStyling from "./PrintableStyling";
 
 const preloadedTestPromises = {
     "140.json": import("./tests/140.json"),
@@ -103,6 +104,7 @@ function LSATRenderer() {
 
     return (
         <div className="lsat-container">
+            {parsedData && <PrintableStyling />}
             <div className="input-section">
                 <Heading as="h2">LSAT Warthog Test Viewer</Heading>
                 <p>

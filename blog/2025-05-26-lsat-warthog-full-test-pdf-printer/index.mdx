@@ -7,17 +7,16 @@ tags:
 ---
 
 import LSATRenderer from './LSATRenderer.tsx';
-import './printable.css';
 
-<p className="print:hidden">
+<div className="print:hidden">
 I created LSAT Warthog to render the LSAT tests available on LawHub as HTML to allow easy PDF printing and on-paper test prep.
-</p>
+</div>
 
 {/* truncate */}
 
-<p className="print:hidden">
+<div className="print:hidden">
 I have pre-loaded the free LSAT tests from the site, so you can select from `140`, `141`, `157`, and `158` in the dropdown below. If you want to render a different test, you will need to download the JSON data for that test from your own lawhub account and paste it into the text area yourself.
-</p>
+</div>
 
 <details className="print:hidden">
 <summary>
