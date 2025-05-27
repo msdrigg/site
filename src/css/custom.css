@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
+.navbar__logo > img {
+    border-radius: 100%;
+}
+
 ol {
     list-style-type: decimal;
 }

@@ -55,7 +55,7 @@ const config: Config = {
       title: "Scott",
       logo: {
         alt: 'Scott Driggers Logo',
-        src: '/img/me.png',
+        src: 'https://gravatar.com/avatar/c7abdf73e309877ecf09e03f27d44a4530dbb98035e47bd86b001a396d095a9b?size=512',
       },
       items: [
         { to: '/blog', label: 'Blog', position: 'left' },
