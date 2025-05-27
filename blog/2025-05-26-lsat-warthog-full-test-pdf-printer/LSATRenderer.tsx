@@ -224,36 +224,41 @@ function LSATRenderer() {
                     </div>
 
                     {parsedData.module?.sections?.map((section, sectionIdx) => (
-                        <div
-                            key={section.sectionId || sectionIdx}
-                            className={`section ${
-                                printMode === "answers" ? "print-hidden" : ""
-                            }`}
-                        >
-                            <div className="section-header">
-                                Section {sectionIdx + 1}:{" "}
-                                {section.sectionId ||
-                                    `Section ${sectionIdx + 1}`}
+                        <>
+                            {sectionIdx > 0 && <div className="page-break" />}
+                            <div
+                                key={section.sectionId || sectionIdx}
+                                className={`section ${
+                                    printMode === "answers"
+                                        ? "print-hidden"
+                                        : ""
+                                }`}
+                            >
+                                <div className="section-header">
+                                    Section {sectionIdx + 1}:{" "}
+                                    {section.sectionId ||
+                                        `Section ${sectionIdx + 1}`}
+                                </div>
+
+                                {section.directions && (
+                                    <div
+                                        className="directions"
+                                        dangerouslySetInnerHTML={{
+                                            __html: cleanHtmlText(
+                                                section.directions
+                                            ),
+                                        }}
+                                    ></div>
+                                )}
+
+                                {section.items?.map((item) => (
+                                    <QuestionItem
+                                        item={item}
+                                        sectionNumber={sectionIdx + 1}
+                                    />
+                                ))}
                             </div>
-
-                            {section.directions && (
-                                <div
-                                    className="directions"
-                                    dangerouslySetInnerHTML={{
-                                        __html: cleanHtmlText(
-                                            section.directions
-                                        ),
-                                    }}
-                                ></div>
-                            )}
-
-                            {section.items?.map((item) => (
-                                <QuestionItem
-                                    item={item}
-                                    sectionNumber={sectionIdx + 1}
-                                />
-                            ))}
-                        </div>
+                        </>
                     ))}
 
                     <AnswerKey parsedData={parsedData} printMode={printMode} />
