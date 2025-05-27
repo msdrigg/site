@@ -4,6 +4,8 @@ import * as d3 from "d3";
 import styles from "./styles.module.css";
 import * as topojson from "topojson-client";
 
+type DataType = { key: string; value: [number, number] };
+
 export default function LightSpeed() {
     let { withBaseUrl } = useBaseUrlUtils();
     let id = useId();
@@ -272,11 +274,11 @@ export default function LightSpeed() {
             });
             svg.selectAll(`path.${styles.countyFill}`)
                 .data(dVList)
-                .style("fill-opacity", function (d: any) {
+                .style("fill-opacity", function (d: DataType) {
                     if (+d.value[0] > 0) return 0;
                     return 1;
                 })
-                .on("mouseover", function (evt: MouseEvent, d: any) {
+                .on("mouseover", function (evt: MouseEvent, d: DataType) {
                     if (+d.value[0] >= 1) return;
                     let firstS = "";
                     let secondS = "";
@@ -300,7 +302,7 @@ export default function LightSpeed() {
                         .style("left", evt.pageX + "px")
                         .style("top", evt.pageY - 28 + "px");
                 })
-                .on("mouseout", function (d) {
+                .on("mouseout", function () {
                     tooltip.transition().duration(500).style("opacity", 0);
                 });
             let countyLocations = svg
@@ -311,31 +313,37 @@ export default function LightSpeed() {
                 .enter()
                 .append("g")
                 .attr("class", "county-centroid")
-                .attr("transform", function (d: any) {
-                    return "translate(" + centroids[d.key] + ")";
-                });
+                .attr(
+                    "transform",
+                    function (d: { key: string; value: [number, number] }) {
+                        return "translate(" + centroids[d.key] + ")";
+                    }
+                );
 
-            let cases = countyLocations
+            countyLocations
                 .append("circle")
                 .attr("class", styles.case)
-                .attr("r", function (d: any) {
-                    return radius(+d.value[0]);
-                });
+                .attr(
+                    "r",
+                    function (d: { key: string; value: [number, number] }) {
+                        return radius(+d.value[0]);
+                    }
+                );
 
             countyLocations
                 .append("circle")
                 .attr("class", styles.death)
-                .attr("r", function (d: any) {
+                .attr("r", function (d: DataType) {
                     return radius(+d.value[1]);
                 });
 
             countyLocations
                 .append("circle")
                 .attr("class", styles.caseBoundary)
-                .attr("r", function (d: any) {
+                .attr("r", function (d: DataType) {
                     return radius(+d.value[0]);
                 })
-                .on("mouseover", function (evt: MouseEvent, d: any) {
+                .on("mouseover", function (evt: MouseEvent, d: DataType) {
                     let firstS = "";
                     let secondS = "";
                     if (d.value[0] != 1) firstS = "s";
@@ -358,7 +366,7 @@ export default function LightSpeed() {
                         .style("left", evt.pageX + "px")
                         .style("top", evt.pageY - 28 + "px");
                 })
-                .on("mouseout", function (d) {
+                .on("mouseout", function () {
                     tooltip.transition().duration(500).style("opacity", 0);
                 });
         }
@@ -412,21 +420,21 @@ export default function LightSpeed() {
                 });
 
             if (day == 0) {
-                cases.attr("r", function (d: any) {
+                cases.attr("r", function (d: DataType) {
                     return radius(+d.value[0]);
                 });
 
-                deaths.attr("r", function (d: any) {
+                deaths.attr("r", function (d: DataType) {
                     return radius(+d.value[1]);
                 });
 
-                boundaries.attr("r", function (d: any) {
+                boundaries.attr("r", function (d: DataType) {
                     return radius(+d.value[0]);
                 });
 
                 svg.selectAll(`path.${styles.countyFill}`)
                     .data(dVList)
-                    .style("fill-opacity", function (d: any) {
+                    .style("fill-opacity", function (d: DataType) {
                         if (+d.value[0] >= 1) return 0;
                         return 1;
                     });
@@ -437,7 +445,7 @@ export default function LightSpeed() {
                     .transition()
                     .duration(duration)
                     .ease(transitionEase)
-                    .attr("r", function (d: any) {
+                    .attr("r", function (d: DataType) {
                         return radius(+d.value[0]);
                     });
 
@@ -445,7 +453,7 @@ export default function LightSpeed() {
                     .transition()
                     .duration(duration)
                     .ease(transitionEase)
-                    .attr("r", function (d: any) {
+                    .attr("r", function (d: DataType) {
                         return radius(+d.value[1]);
                     });
 
@@ -453,7 +461,7 @@ export default function LightSpeed() {
                     .transition()
                     .duration(duration)
                     .ease(transitionEase)
-                    .attr("r", function (d: any) {
+                    .attr("r", function (d: DataType) {
                         return radius(+d.value[0]);
                     });
 
@@ -462,16 +470,17 @@ export default function LightSpeed() {
                     .transition()
                     .ease(transitionEase)
                     .duration(duration)
-                    .style("fill-opacity", function (d: any) {
+                    .style("fill-opacity", function (d: DataType) {
                         if (+d.value[0] >= 1) return 0;
                         return 1;
                     });
             }
         }
 
-        d3.json(withBaseUrl("covid-spread-sc/states.json")).then(function (
-            sc: any
-        ) {
+        d3.json(withBaseUrl("covid-spread-sc/states.json")).then(function (sc: {
+            type: string;
+            objects: { places: object };
+        }) {
             let state = topojson.feature(sc, sc.objects.places);
 
             svg.append("path")
@@ -480,61 +489,62 @@ export default function LightSpeed() {
                 .attr("class", styles.state);
         });
 
-        d3.json(withBaseUrl("covid-spread-sc/counties.json")).then(function (
-            counties: any
-        ) {
-            let features = topojson.feature(
-                counties,
-                counties.objects.places
-            ).features;
-            svg.append("g")
-                .selectAll(`path.${styles.countyFill}`)
-                .data(
-                    features.sort(function (a, b) {
-                        if (b.properties.NAME > a.properties.NAME) return -1;
-                        if (b.properties.NAME < a.properties.NAME) return 1;
-                        return 0;
-                    })
-                )
-                .enter()
-                .append("path")
-                .attr("d", path)
-                .attr("class", styles.countyFill);
-
-            svg.append("path")
-                .datum(
-                    topojson.mesh(
-                        counties,
-                        counties.objects.places,
-                        function (a, b) {
-                            return a !== b;
-                        }
+        d3.json(withBaseUrl("covid-spread-sc/counties.json")).then(
+            function (counties: { objects: { places: object } }) {
+                let features = topojson.feature(
+                    counties,
+                    counties.objects.places
+                ).features;
+                svg.append("g")
+                    .selectAll(`path.${styles.countyFill}`)
+                    .data(
+                        features.sort(function (a, b) {
+                            if (b.properties.NAME > a.properties.NAME)
+                                return -1;
+                            if (b.properties.NAME < a.properties.NAME) return 1;
+                            return 0;
+                        })
                     )
-                )
-                .attr("d", path)
-                .attr("class", styles.countyBoundary);
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr("class", styles.countyFill);
 
-            svg.append("path")
-                .datum(
-                    topojson.mesh(
-                        counties,
-                        counties.objects.places,
-                        function (a, b) {
-                            return a === b;
-                        }
+                svg.append("path")
+                    .datum(
+                        topojson.mesh(
+                            counties,
+                            counties.objects.places,
+                            function (a, b) {
+                                return a !== b;
+                            }
+                        )
                     )
-                )
-                .attr("d", path)
-                .attr("class", styles.countyBoundary);
-            for (let i = 0; i < features.length; i++) {
-                let centroid = path.centroid(features[i]);
-                if (features[i].properties.NAME == "Charleston") {
-                    centroid = [centroid[0] - 15, centroid[1] + 12];
+                    .attr("d", path)
+                    .attr("class", styles.countyBoundary);
+
+                svg.append("path")
+                    .datum(
+                        topojson.mesh(
+                            counties,
+                            counties.objects.places,
+                            function (a, b) {
+                                return a === b;
+                            }
+                        )
+                    )
+                    .attr("d", path)
+                    .attr("class", styles.countyBoundary);
+                for (let i = 0; i < features.length; i++) {
+                    let centroid = path.centroid(features[i]);
+                    if (features[i].properties.NAME == "Charleston") {
+                        centroid = [centroid[0] - 15, centroid[1] + 12];
+                    }
+                    centroids[features[i].properties.NAME] = centroid;
                 }
-                centroids[features[i].properties.NAME] = centroid;
+                inputInitialData();
             }
-            inputInitialData();
-        });
+        );
     }, [id]);
 
     return <div className={styles.wrapper} id={id} />;

@@ -14,10 +14,15 @@ export default function LightSpeed() {
         const mpsToMph = 2.23694;
         const margin = { top: 10, bottom: 30, left: 10, right: 10 };
 
-        let dataContainer: string | any[];
-        let canvas: d3.Selection<SVGGElement, unknown, HTMLElement, any>,
+        let dataContainer: {
+            name: string;
+            speed: number;
+            image: string;
+            description: string;
+        }[];
+        let canvas: d3.Selection<SVGGElement, unknown, HTMLElement, unknown>,
             objects: d3.Selection<SVGGElement, unknown, SVGGElement, unknown>,
-            gX: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+            gX: d3.Selection<SVGGElement, unknown, HTMLElement, unknown>;
 
         let x = d3.scaleLog().domain([6e1, c]).range([0, width]);
         let xAxis = d3.axisBottom(x);
@@ -61,9 +66,13 @@ export default function LightSpeed() {
                 .scale(currentScale);
             let new_x = newTransform.rescaleX(x);
             gX.call(xAxis.scale(new_x));
-            objects.data(dataContainer).attr("transform", (d) => {
-                return "translate(" + new_x(d.speed) + "," + height / 2 + ")";
-            });
+            objects
+                .data(dataContainer)
+                .attr("transform", (d: { speed: number }) => {
+                    return (
+                        "translate(" + new_x(d.speed) + "," + height / 2 + ")"
+                    );
+                });
         }
 
         function motion(event: WheelEvent) {
@@ -98,7 +107,7 @@ export default function LightSpeed() {
                 objects
                     .append("rect")
                     .attr("height", hsize)
-                    .attr("width", function (d: any) {
+                    .attr("width", function (d: { name: string }) {
                         return imageRatios[d.name] * hsize;
                     })
                     .attr("stroke", "white")
@@ -114,7 +123,7 @@ export default function LightSpeed() {
                 objects
                     .append("image")
                     .attr("height", hsize)
-                    .attr("width", function (d: any) {
+                    .attr("width", function (d: { name: string }) {
                         return imageRatios[d.name] * hsize;
                     })
                     .attr("y", function (d, i) {
@@ -124,7 +133,7 @@ export default function LightSpeed() {
                             (scaleFactor * objectNumber) / 2
                         );
                     })
-                    .attr("href", (d: any) => {
+                    .attr("href", (d: { image: string }) => {
                         return withBaseUrl(`light-speed/${d.image}`);
                     });
             } else {
@@ -133,7 +142,14 @@ export default function LightSpeed() {
         }
 
         d3.json(withBaseUrl("light-speed/FastThings.json")).then(
-            (data: any[]) => {
+            (
+                data: {
+                    name: string;
+                    speed: number;
+                    image: string;
+                    description: string;
+                }[]
+            ) => {
                 dataContainer = JSON.parse(JSON.stringify(data));
                 for (let i = 0; i < dataContainer.length; i++) {
                     dataContainer[i].speed =
@@ -143,7 +159,7 @@ export default function LightSpeed() {
                 imageRatios = {};
                 for (let i = 0; i < dataContainer.length; i++) {
                     let img = new Image();
-                    img.onload = function (this: HTMLImageElement, ev: Event) {
+                    img.onload = function (this: HTMLImageElement) {
                         imageRatios[dataContainer[i].name] =
                             this.width / this.height;
                         updateRectanglesIfComplete();
@@ -155,39 +171,49 @@ export default function LightSpeed() {
 
                 objects = canvas
                     .selectAll(".objects")
-                    .data(data, function (d: any) {
+                    .data(data, function (d: { name: string }) {
                         return d.name;
                     })
                     .enter()
                     .append("g")
                     .attr("class", "objects")
-                    .attr("transform", (d) => {
+                    .attr("transform", (d: { speed: number }) => {
                         return (
                             "translate(" + x(d.speed) + "," + height / 2 + ")"
                         );
                     })
-                    .on("mouseover", function (evt: MouseEvent, d) {
-                        let tooltipText =
-                            '<span style="font-weight: bold; font-size: 12px">' +
-                            d.name +
-                            "</span><br/>" +
-                            '<span style="font-style: italic">' +
-                            d.speed +
-                            "</span>" +
-                            " mph" +
-                            "</br>" +
-                            "</br>" +
-                            d.description;
-                        tooltip
-                            .transition()
-                            .duration(200)
-                            .style("opacity", 0.9);
-                        tooltip
-                            .html(tooltipText)
-                            .style("left", evt.offsetX + "px")
-                            .style("top", evt.offsetY - 28 + "px");
-                    })
-                    .on("mouseout", function (d) {
+                    .on(
+                        "mouseover",
+                        function (
+                            evt: MouseEvent,
+                            d: {
+                                name: string;
+                                speed: number;
+                                description: string;
+                            }
+                        ) {
+                            let tooltipText =
+                                '<span style="font-weight: bold; font-size: 12px">' +
+                                d.name +
+                                "</span><br/>" +
+                                '<span style="font-style: italic">' +
+                                d.speed +
+                                "</span>" +
+                                " mph" +
+                                "</br>" +
+                                "</br>" +
+                                d.description;
+                            tooltip
+                                .transition()
+                                .duration(200)
+                                .style("opacity", 0.9);
+                            tooltip
+                                .html(tooltipText)
+                                .style("left", evt.offsetX + "px")
+                                .style("top", evt.offsetY - 28 + "px");
+                        }
+                    )
+                    .on("mouseout", function () {
                         tooltip.transition().duration(500).style("opacity", 0);
                     });
 

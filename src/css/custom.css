@@ -67,7 +67,3 @@ span.footer__link-separator {
 .footer__link-item {
     display: inline;
 }
-.theme-blog-footer-edit-meta-row,
-article > header {
-    @apply print:hidden;
-}

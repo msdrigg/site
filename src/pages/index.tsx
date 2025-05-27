@@ -3,7 +3,6 @@ import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
-import { Timeline, TimelineItem } from "../components/Timeline/Timeline";
 import { ReactNode } from "react";
 
 function HomepageHeader() {

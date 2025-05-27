@@ -24,7 +24,9 @@ export default function Home(): ReactNode {
             </div>
             <main className="px-8 py-4 space-y-8">
                 <section>
-                    <h2 className="text--left">Background</h2>
+                    <Heading as="h2" className="text--left">
+                        Background
+                    </Heading>
                     <p>
                         I graduated from Clemson University with degrees in
                         physics and mathematics. In college I focused on the
@@ -52,11 +54,15 @@ export default function Home(): ReactNode {
                 </section>
 
                 <section>
-                    <h2 className="text-left">Experience</h2>
+                    <Heading as="h2" className="text-left">
+                        Experience
+                    </Heading>
                     <Timeline>
                         <TimelineItem date="2022-Present">
-                            <h2>Systems Architect</h2>
-                            <h3 className={styles.cardHeader}>Poltys Inc.</h3>
+                            <Heading as="h2">Systems Architect</Heading>
+                            <Heading as="h3" className={styles.cardHeader}>
+                                Poltys Inc.
+                            </Heading>
                             <p>
                                 Lead engineer on Location Based Services
                                 project.
@@ -67,8 +73,12 @@ export default function Home(): ReactNode {
                             </p>
                         </TimelineItem>
                         <TimelineItem date="2020-2022">
-                            <h1>Data Scientist · Software Engineer</h1>
-                            <h3 className={styles.cardHeader}>Poltys Inc.</h3>
+                            <Heading as="h1">
+                                Data Scientist · Software Engineer
+                            </Heading>
+                            <Heading as="h3" className={styles.cardHeader}>
+                                Poltys Inc.
+                            </Heading>
                             <p>
                                 Developed machine learning models for fall risk.
                                 Developed algorithms for indoor location
@@ -77,10 +87,10 @@ export default function Home(): ReactNode {
                         </TimelineItem>
 
                         <TimelineItem date="Summer 2020">
-                            <h1>Research Intern</h1>
-                            <h3 className={styles.cardHeader}>
+                            <Heading as="h1">Research Intern</Heading>
+                            <Heading as="h3" className={styles.cardHeader}>
                                 Oak Ridge National Lab
-                            </h3>
+                            </Heading>
                             <p>
                                 Applied machine learning models to improve the
                                 performance of physics simulations.
@@ -88,10 +98,10 @@ export default function Home(): ReactNode {
                         </TimelineItem>
 
                         <TimelineItem date="Summer 2019">
-                            <h1>Research Intern</h1>
-                            <h3 className={styles.cardHeader}>
+                            <Heading as="h1">Research Intern</Heading>
+                            <Heading as="h3" className={styles.cardHeader}>
                                 Clemson University - SIN Group
-                            </h3>
+                            </Heading>
                             <p>
                                 Worked on a project to deflect an ion beam in a
                                 strong vacuum using a 3D printed deflector.
@@ -105,10 +115,12 @@ export default function Home(): ReactNode {
                         </TimelineItem>
 
                         <TimelineItem date="2018-2021">
-                            <h1>B.S. Physics and B.S. Mathematics</h1>
-                            <h3 className={styles.cardHeader}>
+                            <Heading as="h1">
+                                B.S. Physics and B.S. Mathematics
+                            </Heading>
+                            <Heading as="h3" className={styles.cardHeader}>
                                 Clemson University
-                            </h3>
+                            </Heading>
                             <p>
                                 Focused on computational and theoretical physics
                                 as well as not-very-applied mathematics.
@@ -125,7 +137,7 @@ export default function Home(): ReactNode {
                             className={clsx("card", styles.card, "shadow--md")}
                         >
                             <div className="card__header">
-                                <h3>Home</h3>
+                                <Heading as={"h3"}>Home</Heading>
                             </div>
                             <div className="card__body">
                                 <p>
@@ -138,7 +150,7 @@ export default function Home(): ReactNode {
                             className={clsx("card", styles.card, "shadow--md")}
                         >
                             <div className="card__header">
-                                <h3>Hobbies</h3>
+                                <Heading as={"h3"}>Hobbies</Heading>
                             </div>
                             <div className="card__body">
                                 <p>

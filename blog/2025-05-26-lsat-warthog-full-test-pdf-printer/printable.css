@@ -1,0 +1,4 @@
+.theme-blog-footer-edit-meta-row,
+article > header {
+    @apply print:hidden;
+}
