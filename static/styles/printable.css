@@ -1,9 +1,14 @@
 @media print {
+    .description,
+    .generation-date {
+        color: #000;
+    }
     .input-section {
         display: none !important;
     }
 
     .lsat-container {
+        --ifm-font-color-base: #000;
         max-width: none;
         margin: 0;
     }
