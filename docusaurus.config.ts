@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import tailwindPlugin from './plugins/tailwind-config.cjs';
 
 const config: Config = {
-  title: 'Scott\'s Site',
+  title: 'Scott',
   tagline: 'Looking into it',
   favicon: '/img/me.png',
 
@@ -41,7 +41,6 @@ const config: Config = {
         blog: {
           showReadingTime: true,
           blogSidebarCount: 10,
-          blogTitle: 'Scott\'s Blog',
         },
         theme: {
           customCss: './src/css/custom.css',
