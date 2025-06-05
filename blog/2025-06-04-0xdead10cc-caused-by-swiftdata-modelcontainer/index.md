@@ -7,7 +7,7 @@ tags:
     - ios
 ---
 
-I'm writing today about another tricky crash I recently solved in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). Unlike the the other crash [I wrote about recently](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket), this one was actually caught by the iOS crash reporter. What made this bug particularly tricky was the fact that the standard XCode crash viewer obfuscated the underlying reason for the crash. In this post, I'm going to walk through how I identified the true cause of the crash and solved the underlying problem. At the end of the writeup, I'll share some best practices I learned about managing background execution on iOS.
+I'm writing today about another tricky crash I recently solved in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). Unlike the the other crash [I wrote about recently](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket/index.md), this one was actually caught by the iOS crash reporter. What made this bug particularly tricky was the fact that the standard XCode crash viewer obfuscated the underlying reason for the crash. In this post, I'm going to walk through how I identified the true cause of the crash and solved the underlying problem. At the end of the writeup, I'll share some best practices I learned about managing background execution on iOS.
 
 <!-- truncate -->
 
