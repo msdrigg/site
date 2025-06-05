@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import tailwindPlugin from './plugins/tailwind-config.cjs';
 
 const config: Config = {
-  title: 'Scott\'s Homepage',
+  title: 'Scott\'s Site',
   tagline: 'Looking into it',
   favicon: '/img/me.png',
 
@@ -17,7 +17,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'msdrigg', // Usually your GitHub org/user name.
-  projectName: 'msdrigg', // Usually your repo name.
+  projectName: 'site', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,6 +41,7 @@ const config: Config = {
         blog: {
           showReadingTime: true,
           blogSidebarCount: 10,
+          blogTitle: 'Scott\'s Blog',
         },
         theme: {
           customCss: './src/css/custom.css',

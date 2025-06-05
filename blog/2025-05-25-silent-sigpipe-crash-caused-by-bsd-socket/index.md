@@ -7,6 +7,8 @@ tags:
     - ios
 ---
 
+![console header picture](assets/console.png)
+
 Over the past few months I have been working on diagnosing and fixing many of the crashes in my Roku remote app ([Roam](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197)).
 
 The app has been mostly stable for about a year now, so the majority of core logic crashes have already been fixed, leaving only unpredictable and obfuscated bugs.
