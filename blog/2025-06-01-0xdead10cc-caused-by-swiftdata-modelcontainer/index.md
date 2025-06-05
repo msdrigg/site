@@ -8,7 +8,7 @@ tags:
 draft: true
 ---
 
-I'm writing today about another tricky crash I investigated in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). Unlike the [previous post](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket) in my troubleshooting journey, the iOS crash reporter actually caught this crash. What made this crash tricky was the fact that the XCode crash viewer obfuscated the underlying reason for the crash. In this post, I'm going to walk through how I identified the true cause of the crash and solved the underlying issue, and through the process I'll share some best practices I learned about managing background execution on iOS.
+I'm writing today about another tricky crash I investigated in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). Unlike the [previous post](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket) about troubleshooting crahes, the iOS crash reporter actually caught this crash. What made this crash tricky was the fact that the standard XCode crash viewer obfuscated the underlying reason for the crash. In this post, I'm going to walk through how I identified the true cause of the crash and solved the underlying issue, and through the process I'll share some best practices I learned about managing background execution on iOS.
 
 <!-- truncate -->
 
@@ -45,8 +45,6 @@ For app extension and watch: beginActivity(options:reason:) | Apple Developer Do
 Help from Quinn:
 Notes on background execution: https://developer.apple.com/forums/thread/85066
 QRunInBackgroundAssertion: https://developer.apple.com/forums/thread/729335
-
-## Posting the Fix
 
 Fix (Background assertion): https://github.com/msdrigg/Roam/blob/cc671154e61d36747502db2b83029d5975170f74/Shared/Utils/QBackgroundExecution.swift
 Fix (Add Background assertion to key code paths): https://github.com/msdrigg/Roam/commit/b7013adab0ea5c9cd2c77c754f4a060e3c6d4080
