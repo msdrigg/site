@@ -39,6 +39,9 @@ const config: Config = {
           showReadingTime: true,
           blogSidebarCount: 10,
           blogTitle: "Scott's Blog",
+          feedOptions: {
+            title: "Scott's Blog",
+          }
         },
         theme: {
           customCss: './src/css/custom.css',
