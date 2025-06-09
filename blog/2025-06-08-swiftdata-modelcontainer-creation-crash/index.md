@@ -5,7 +5,6 @@ authors: msdrigg
 tags:
     - projects
     - ios
-draft: true
 ---
 
 Today I'm writing the last of three blog posts in my series about investigating tricky crashes in my [Roku remote app](https://apps.apple.com/us/app/roam-a-better-remote-for-roku/id6469834197). See my previous posts on [silent sigpipe exits](/blog/2025-05-25-silent-sigpipe-crash-caused-by-bsd-socket/index.md) and [0xdead10cc crashes](/blog/2025-06-01-0xdead10cc-caused-by-swiftdata-modelcontainer/index.md). This crash focuses on troubleshooting a series of crashes from one source: SwiftData's `ModelContainer.init`.
