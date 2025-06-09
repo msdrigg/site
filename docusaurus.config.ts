@@ -41,6 +41,7 @@ const config: Config = {
           blogTitle: "Scott's Blog",
           feedOptions: {
             title: "Scott's Blog",
+            description: "Sporadic writings mostly about software development by Scott Driggers.",
           }
         },
         theme: {
