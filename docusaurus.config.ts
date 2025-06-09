@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import tailwindPlugin from './plugins/tailwind-config.cjs';
 
 const config: Config = {
-  title: 'Scott',
+  title: 'scottdriggers.com',
   tagline: 'Looking into it',
   favicon: '/img/me.png',
 
@@ -22,9 +22,6 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -41,6 +38,7 @@ const config: Config = {
         blog: {
           showReadingTime: true,
           blogSidebarCount: 10,
+          blogTitle: "Scott's Blog",
         },
         theme: {
           customCss: './src/css/custom.css',
