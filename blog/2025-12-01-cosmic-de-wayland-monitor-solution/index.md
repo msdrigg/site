@@ -4,6 +4,7 @@ title: Setting Up Post-Login and Post-Suspend Scripts in COSMIC Desktop Environm
 authors: msdrigg
 tags:
     - linux
+draft: true
 ---
 
 ### Background: The Goal
@@ -163,3 +164,21 @@ Nov 10 10:36:21 pop-os systemd[3953]: Finished cosmic-monitor-setup.service - CO
 -   View logs: journalctl -u <service> -n 50
 -   Test immediately: Start/stop services without waiting for login/suspend
 -   Verify environment: Echo variables from scripts to logs for debugging
+
+### AFTER_FIX_>>>
+
+[Unit]
+Description=Reload thinkfan after waking up from suspend
+After=sysinit.target
+After=suspend.target
+After=suspend-then-hibernate.target
+After=hybrid-sleep.target
+After=hibernate.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pkill -x -usr2 thinkfan
+
+[Install]
+WantedBy=sleep.target
+
