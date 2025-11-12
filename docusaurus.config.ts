@@ -102,6 +102,7 @@ const config: Config = {
                 "diff",
                 "shell-session",
                 "log",
+                "systemd",
             ],
         },
     } satisfies Preset.ThemeConfig,

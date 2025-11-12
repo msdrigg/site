@@ -1,6 +1,6 @@
 ---
 slug: cosmic-de-wayland-monitor-positiond
-title: Using
+title: Building a cosmic-desktop plugin in rust
 authors: msdrigg
 tags:
     - linux
@@ -23,7 +23,7 @@ So `cosmic-epoch` is fully open source on Github, so I was hopeful that I would 
 
 Ok, so my next solution was to setup a simple systemd unit to run after wakeup and have it position with the builtin utility `cosmic-randr`. I looked through the systemctl discussions for people trying to run scripts after wakeup and found a useful item `sleep.target`. This target triggers when the system sleeps and un-triggers when the system wakes back up, so I could run my script after wakeup with this setup (pulled from [thinkfan-wakeup.service](https://sources.debian.org/src/thinkfan/2.0.0-1/rcscripts/systemd/thinkfan-wakeup.service))
 
-```ini
+```systemd
 # cosmic-monitor-hack.service
 [Unit]
 Description=Re-position monitors after wakeup
@@ -245,7 +245,7 @@ impl Dispatch<ext_idle_notification_v1::ExtIdleNotificationV1, ()> for IdleMonit
 
 And I created a systemd unit file that starts this program on every login so my screen position is always being monitored.
 
-```ini
+```systemd
 [Unit]
 Description=COSMIC Monitor Positioning Daemon
 Documentation=https://github.com/pop-os/cosmic-comp
