@@ -19,6 +19,8 @@ But, I have noticed one particularly annoying problem: my persistent monitor con
 
 So `cosmic-epoch` is fully open source on Github, so I was hopeful that I would be able to find some people with the same problem as me and maybe a work-around. Lucky me, someone else had the same problem [#2102](https://github.com/pop-os/cosmic-epoch/issues/2102). But unlucky me, it's from 3 months ago with no comments or interactions.
 
+<!-- truncate -->
+
 Ok, so my next solution was to setup a simple systemd unit to run after wakeup and have it position with the builtin utility `cosmic-randr`. I looked through the systemctl discussions for people trying to run scripts after wakeup and found a useful item `sleep.target`. This target triggers when the system sleeps and un-triggers when the system wakes back up, so I could run my script after wakeup with this setup (pulled from [thinkfan-wakeup.service](https://sources.debian.org/src/thinkfan/2.0.0-1/rcscripts/systemd/thinkfan-wakeup.service))
 
 ```ini
