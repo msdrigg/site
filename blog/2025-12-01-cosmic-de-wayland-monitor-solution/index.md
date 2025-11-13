@@ -10,7 +10,7 @@ This blog post is the story of me creating [cosmic-monitor-positiond](https://gi
 
 ## Background: What is this all about?
 
-I recently updated my linux desktop from Pop!_OS 22.04 (which was released over 3 years ago) to the latest (beta) Pop!_OS 24.04. This release comes with an entirely new custom wayland-based desktop environment called `cosmic-epoch`. Overall, I have loved the cosmic desktop environment better than gnome and I
+I recently updated my linux desktop from Pop!\_OS 22.04 (which was released over 3 years ago) to the latest (beta) Pop!\_OS 24.04. This release comes with an entirely new custom wayland-based desktop environment called `cosmic-epoch`. Overall, I have loved the cosmic desktop environment better than gnome and I
 am excited that the system 76 team is working on something so ambitious.
 
 But, I have noticed one particularly annoying problem: my persistent monitor configuration is not actually very persistent. I have 2 monitors side by side and about half of time when the system wakes up from idle, the monitors are positioned backwards (the left monitor is configured to be on the right). While it is an easy fix: just open settings and re-arange the screens; it happens multiple times a day and really gets on my nerves.
@@ -94,7 +94,7 @@ What happened on October 4 to stop the computer from sleeping? Thinking back, I 
 
 ## So what is happening when my computer goes to sleep?
 
-Okay so it seems like systemd doesn't operate at the level we need to monitor for sleep-wake events. We need to hook into whatever system cosmic-de uses to turn the monitors off after 15 minutes. Again, we are thankful to our system76 overlords for making `cosmic-epoch` open source. I found [cosmic-idle](https://github.com/pop-os/cosmic-idle/blob/master/src/main.rs), which is the service that manages the screensaver and suspend state during idle. This has exactly the kind of idle/wakeup monitoring I'm looking for, and it's all in `main.rs`!
+Okay so it seems like systemd doesn't operate at the level we need to monitor for sleep-wake events. We need to hook into whatever system cosmic-de uses to turn the monitors off after 15 minutes. Again, we are thankful to our system76 overlords for making `cosmic-epoch` open source. I found [cosmic-idle](https://github.com/pop-os/cosmic-idle/blob/master/src/main.rs), which is the service that manages the screensaver and suspend state during idle. This has exactly the kind of idle/wakeup monitoring I'm looking for, and it's all in `main.rs`.
 
 So this is a rust crate, which I am familiar with, but the main loop is managed by [calloop](https://docs.rs/calloop/latest/calloop/) which I am not familiar with.
 
@@ -263,15 +263,15 @@ Environment=RUST_LOG=info
 WantedBy=graphical-session.target
 ```
 
-Now finally this worked great! After some simple debugging, the program hooked hooked into wayland events, woke itself up on resume and reconfigured the monitors as expected!
+Now finally this worked great. After some simple debugging, the program hooked hooked into wayland events, woke itself up on resume and reconfigured the monitors as expected.
 
 ## Making it More Complicated
 
 So what does every simple working solution need? More complexity! And I know several ways we can add that:
 
-1. Detect monitor plug-in events *(just in case the user turns on their monitor after the system has already woken up)*
-2. Stored Configuration *(so the at-least-one other person with this problem can have this work for their setup)*
-3. Switching from calling `cosmic-randr` as a shell command to binding on it's internal API *(no user-discernable benfits)*
+1. Detect monitor plug-in events _(just in case the user turns on their monitor after the system has already woken up)_
+2. Stored Configuration _(so the at-least-one other person with this problem can have this work for their setup)_
+3. Switching from calling `cosmic-randr` as a shell command to binding on it's internal API _(no user-discernable benfits)_
 
 **UDev Monitor Hotplug Detection**
 
@@ -319,7 +319,7 @@ Now for ease-of-use, I wrote a `save` subcommand so users can call `cosmic-monit
 1. Most users can just call `./install.sh` and the system will 1) build, 2) install, 3) capture and save their current configuration, and 4) run in the background continually re-applying it whenever their system wakes up from idle or when a monitor is plugged in.
 2. Some users who decide to update their configuration later (maybe they get a new monitor) will just need to manually setup the configuration they desire in system settings and then call `cosmic-monitor-positiond save` to save it.
 
-Now notice that my program is reading *and* editing the `state.toml` save file. When this edit happens, I want to keep comments/whitespace/formatting looking nice so it is still very human readble. To do this, I found the `toml_edit` crate. This crate is used by the `cargo add` command to edit `Cargo.toml` so it can add dependencies without breaking any formatting or comments in the existing file. I like this behavior, so I integrated this crate into my project. It's api is a bit weirder than the more standard `toml` crate, but it's not a big enough deal to make it a problem.
+Now notice that my program is reading _and_ editing the `state.toml` save file. When this edit happens, I want to keep comments/whitespace/formatting looking nice so it is still very human readble. To do this, I found the `toml_edit` crate. This crate is used by the `cargo add` command to edit `Cargo.toml` so it can add dependencies without breaking any formatting or comments in the existing file. I like this behavior, so I integrated this crate into my project. It's api is a bit weirder than the more standard `toml` crate, but it's not a big enough deal to make it a problem.
 
 **Calling cosmic-randr manually**
 
@@ -386,7 +386,7 @@ async fn receive_config_messages(
 }
 ```
 
-Now some of the no-fun among you might say "well why would you switch from a publicly released cli tool to an internal library with no stability gaurantees?" and to those people I would respond: "because I wanted to".
+Now it may be a worse practical choice to switch from a public cli tool to an internal library with no stability guarantees. But it was great fun to implement.
 
 **Better Async Management**
 
